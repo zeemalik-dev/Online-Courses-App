@@ -165,6 +165,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             padding: const EdgeInsets.all(8.0),
                             child: ElevatedButton.icon(
                               onPressed: () {
+                                
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return const DownloadedCourseList();
@@ -213,13 +214,13 @@ class _AccountScreenState extends State<AccountScreen> {
                         ),
                         CircleAvatar(
                           radius: 55,
-                          backgroundImage: NetworkImage(user.image.toString()),
+                          backgroundImage: NetworkImage(user!.photo.toString()),
                           backgroundColor: kLightBlueColor,
                         ),
                         Padding(
                           padding: const EdgeInsets.all(10),
                           child: CustomText(
-                            text: '${user.firstName} ${user.lastName}',
+                            text: '${user.name}',
                             colors: kTextColor,
                             fontSize: 17,
                             fontWeight: FontWeight.w500,

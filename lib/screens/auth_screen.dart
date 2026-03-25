@@ -36,7 +36,7 @@ class _AuthScreenState extends State<AuthScreen> {
   bool _isLoading = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  late User userDetails;
+  late User? userDetails;
 
   Color getColor(Set<WidgetState> states) {
     const Set<WidgetState> interactiveStates = <WidgetState>{
@@ -108,22 +108,22 @@ debugger();
         userDetails = Provider.of<Auth>(context, listen: false).user;
       });
     });
-    if(userDetails.validity == 1){
-      if(userDetails.deviceVerification == 'needed-verification') {
+    if(userDetails?.emailVerifiedAt == 1){
+      if(userDetails?.emailVerifiedAt == 'needed-verification') {
         Navigator.of(context).pushNamed(DeviceVerificationScreen.routeName,
           arguments: {
-            'email': userDetails.email,
-            'token': userDetails.token, // Replace with the actual token value
+            'email': userDetails?.email,
+            'token': userDetails?.token, // Replace with the actual token value
           });
         CommonFunctions.showSuccessToast(
-          userDetails.deviceVerification!.capitalize(),
+          userDetails?.emailVerifiedAt?.capitalize(),
         );
       } else {
         Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
-        CommonFunctions.showSuccessToast('Welcome, ${userDetails.firstName} ${userDetails.lastName}');
+        CommonFunctions.showSuccessToast('Welcome, ${userDetails?.name}');
       }
     } else {
-      CommonFunctions.showErrorDialog(userDetails.deviceVerification!.capitalize(), context);
+      CommonFunctions.showErrorDialog(userDetails?.email?.capitalize()??'', context);
     }
 
     setState(() {

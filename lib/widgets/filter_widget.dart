@@ -169,9 +169,9 @@ class _FilterWidgetState extends State<FilterWidget> {
         Category(
             id: 0,
             title: 'All Category',
-            thumbnail: null,
-            numberOfCourses: null,
-            numberOfSubCategories: null));
+            thumbnail: '',
+            numberOfCourses: 0,
+            numberOfSubCategories: 0, parentId: 0, slug: '', icon: '', sort: 0, createdAt: '', updatedAt: '', childs: []));
     //print(catData);
     final langData = Provider.of<Languages>(context, listen: false).items;
     langData.insert(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:academy_app/models/all_category.dart';
 import 'package:academy_app/models/sub_category.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,36 +26,31 @@ class Categories with ChangeNotifier {
     return [..._allItems];
   }
 
-  Future<void> fetchCategories() async {
-    var url = '$BASE_URL/api/categories';
-    try {
-      final response = await http.get(Uri.parse(url));
-      final extractedData = json.decode(response.body) as List;
-      // ignore: unnecessary_null_comparison
-      if (extractedData == null) {
-        return;
-      }
-      // print(extractedData);
-      final List<Category> loadedCategories = [];
+Future<void> fetchCategories() async {
+  var url = '$BASE_URL/api/categories';
+  try {
+    final response = await http.get(Uri.parse(url));
+    final extractedData = json.decode(response.body) as List;
+    
+    log(extractedData.toString());
+    // debugger();
 
-      for (var catData in extractedData) {
-        loadedCategories.add(Category(
-          id: int.parse(catData['id']),
-          title: catData['name'],
-          thumbnail: catData['thumbnail'],
-          numberOfCourses: catData['number_of_courses'],
-          numberOfSubCategories: catData['number_of_sub_categories'],
-        ));
-
-        // print(catData['name']);
-      }
-      _items = loadedCategories;
-      notifyListeners();
-    } catch (error) {
-      rethrow;
+    if (extractedData.isEmpty) {
+      return;
     }
-  }
+    
+    final List<Category> loadedCategories = [];
 
+    for (var catData in extractedData) {
+      loadedCategories.add(Category.fromJson(catData));
+    }
+    
+    _items = loadedCategories;
+    notifyListeners();
+  } catch (error) {
+    rethrow;
+  }
+}
   Future<void> fetchSubCategories(int catId) async {
     var url = '$BASE_URL/api/sub_categories/$catId';
     try {

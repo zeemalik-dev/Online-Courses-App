@@ -5,11 +5,9 @@ import 'package:academy_app/providers/auth.dart';
 import 'package:academy_app/screens/forgot_password_screen.dart';
 import 'package:academy_app/screens/signup_screen.dart';
 import 'package:academy_app/widgets/app_bar_two.dart';
-import 'package:academy_app/widgets/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/user.dart';
-import 'device_verifcation.dart';
 
 class AuthScreenPrivate extends StatefulWidget {
   static const routeName = '/auth-private';
@@ -33,7 +31,7 @@ class _AuthScreenStatePrivate extends State<AuthScreenPrivate> {
   bool _isLoading = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  late User userDetails;
+  late User? userDetails;
 
   Color getColor(Set<WidgetState> states) {
     const Set<WidgetState> interactiveStates = <WidgetState>{
@@ -104,23 +102,23 @@ class _AuthScreenStatePrivate extends State<AuthScreenPrivate> {
       });
     });
 
-    if(userDetails.validity == 1){
-      if(userDetails.deviceVerification == 'needed-verification') {
-        Navigator.of(context).pushNamed(DeviceVerificationScreen.routeName,
-          arguments: {
-            'email': userDetails.email,
-            'token': userDetails.token, // Replace with the actual token value
-          });
-        CommonFunctions.showSuccessToast(
-          userDetails.deviceVerification!.capitalize(),
-        );
-      } else {
+    // if(userDetails?.emailVerifiedAt == 1){
+    //   if(userDetails?.emailVerifiedAt == 'needed-verification') {
+    //     Navigator.of(context).pushNamed(DeviceVerificationScreen.routeName,
+    //       arguments: {
+    //         'email': userDetails?.email,
+    //         'token': userDetails?.token, // Replace with the actual token value
+    //       });
+    //     CommonFunctions.showSuccessToast(
+    //       userDetails?.emailVerifiedAt?.capitalize(),
+    //     );
+    //   } else {
         Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
-        CommonFunctions.showSuccessToast('Welcome, ${userDetails.firstName} ${userDetails.lastName}');
-      }
-    } else {
-      CommonFunctions.showErrorDialog(userDetails.deviceVerification!.capitalize(), context);
-    }
+        CommonFunctions.showSuccessToast('Welcome, ${userDetails?.name}');
+    //   }
+    // } else {
+    //   CommonFunctions.showErrorDialog(userDetails?.email?.capitalize()??'', context);
+    // }
 
     setState(() {
       _isLoading = false;

@@ -13,24 +13,17 @@ import 'package:path/path.dart';
 class Auth with ChangeNotifier {
   String? _token;
   String? _userId;
-  final User _user =
-      User(userId: '', firstName: '', lastName: '', email: '', role: '', validity: '', deviceVerification: '', token: '');
+  User? _user;
 
   String? get token {
-    if (_token != null) {
-      return _token;
-    }
-    return null;
+    return _token;
   }
 
   String? get userId {
-    if (_userId != null) {
-      return _userId;
-    }
-    return null;
+    return _userId;
   }
 
-  User get user {
+  User? get user {
     return _user;
   }
 
@@ -38,131 +31,90 @@ class Auth with ChangeNotifier {
     var url = '$BASE_URL/api/login?email=$email&password=$password';
 
     try {
-      debugger();
       final response = await http.post(Uri.parse(url));
       final responseData = json.decode(response.body);
-
+      log(responseData.toString());
+debugger();
       if (response.statusCode == 200 || response.statusCode == 201) {
-        if (responseData['validity'] == 0) {
-          _user.validity = responseData['validity'];
-          _user.deviceVerification = responseData['device_verification'];
-          // throw const HttpException('Wrong credentials');
-        } else {
-          _user.userId = responseData['user_id'];
-          _user.firstName = responseData['first_name'];
-          _user.lastName = responseData['last_name'];
-          _user.email = responseData['email'];
-          _user.role = responseData['role'];
-          _user.validity = responseData['validity'];
-          _user.deviceVerification = responseData['device_verification'];
-          _user.token = responseData['token'];
-
-          _token = responseData['token'];
-          _userId = responseData['user_id'];
-
-          await SharedPreferenceHelper().setAuthToken(token!);
+        // Parse the login response using LoginResponse model
+        final loginResponse = LoginResponse.fromJson(responseData);
+        
+        if (loginResponse.user != null && loginResponse.token != null) {
+          _user = loginResponse.user;
+          _token = loginResponse.token;
+          _userId = loginResponse.user?.id?.toString();
+          
+          // Save to shared preferences
+          await SharedPreferenceHelper().setAuthToken(_token!);
           final prefs = await SharedPreferences.getInstance();
           final userData = json.encode({
             'token': _token,
             'user_id': _userId,
-            'user': jsonEncode(_user),
+            'user': _user?.toJson(),
           });
           prefs.setString('userData', userData);
-          
+        } else {
+          // Handle case where login response doesn't have user data
+          throw const HttpException('Invalid login response');
         }
       } else {
-        _user.validity = responseData['validity'];
-        _user.deviceVerification = responseData['device_verification'];
-        // throw const HttpException('Auth Failed');
+        throw const HttpException('Login failed');
       }
 
-      // _token = responseData['token'];
-      // _userId = responseData['user_id'];
-
-      // final loadedUser = User(
-      //   userId: responseData['user_id'],
-      //   firstName: responseData['first_name'],
-      //   lastName: responseData['last_name'],
-      //   email: responseData['email'],
-      //   role: responseData['role'],
-      //   deviceVerification: responseData['device_verification'],
-      // );
-
-      // _user = loadedUser;
-
       notifyListeners();
-      
-      // print(userData);
     } catch (error) {
       rethrow;
     }
   }
 
-
-  // Future<void> login(String email, String password) async {
-  //   var url = '$BASE_URL/api/login?email=$email&password=$password';
-
-  //   try {
-  //     final response = await http.get(Uri.parse(url));
-  //     final responseData = json.decode(response.body);
-
-  //     // print(responseData['validity']);
-  //     if (responseData['validity'] == 0) {
-  //       throw const HttpException('Auth Failed');
-  //     }
-  //     _token = responseData['token'];
-  //     _userId = responseData['user_id'];
-
-  //     final loadedUser = User(
-  //       userId: responseData['user_id'],
-  //       firstName: responseData['first_name'],
-  //       lastName: responseData['last_name'],
-  //       email: responseData['email'],
-  //       role: responseData['role'],
-  //     );
-
-  //     _user = loadedUser;
-
-  //     notifyListeners();
-  //     await SharedPreferenceHelper().setAuthToken(token!);
-  //     final prefs = await SharedPreferences.getInstance();
-  //     final userData = json.encode({
-  //       'token': _token,
-  //       'user_id': _userId,
-  //       'user': jsonEncode(_user),
-  //     });
-  //     prefs.setString('userData', userData);
-  //     // print(userData);
-  //   } catch (error) {
-  //     rethrow;
-  //   }
-  // }
-
   Future<void> getUserInfo() async {
-    // final prefs = await SharedPreferences.getInstance();
-
-    // var userData = (prefs.getString('userData') ?? '');
-    // var response = json.decode(userData);
-    // final authToken = response['token'];
-    // print(response['user']);
     final authToken = await SharedPreferenceHelper().getAuthToken();
     var url = '$BASE_URL/api/userdata?auth_token=$authToken';
+    
     try {
       if (authToken == null) {
         throw const HttpException('No Auth User');
       }
+      
       final response = await http.get(Uri.parse(url));
       final responseData = json.decode(response.body);
 
-      _user.firstName = responseData['first_name'];
-      _user.lastName = responseData['last_name'];
-      _user.email = responseData['email'];
-      _user.image = responseData['image'];
-      _user.facebook = responseData['facebook'];
-      _user.twitter = responseData['twitter'];
-      _user.linkedIn = responseData['linkedin'];
-      _user.biography = responseData['biography'];
-      // print(_user.image);
+      // Update existing user with new data
+      if (_user != null) {
+        _user = User(
+          id: _user!.id,
+          role: _user!.role,
+          email: responseData['email'] ?? _user!.email,
+          status: _user!.status,
+          syncedFromDashboard: _user!.syncedFromDashboard,
+          dashboardCustomerId: _user!.dashboardCustomerId,
+          lastSyncedAt: _user!.lastSyncedAt,
+          name: '${responseData['first_name']} ${responseData['last_name']}',
+          phone: _user!.phone,
+          country: _user!.country,
+          gender: _user!.gender,
+          ageRange: _user!.ageRange,
+          yearsOfExperience: _user!.yearsOfExperience,
+          customerId: _user!.customerId,
+          website: _user!.website,
+          skills: _user!.skills,
+          facebook: responseData['facebook'] ?? _user!.facebook,
+          twitter: responseData['twitter'] ?? _user!.twitter,
+          linkedin: responseData['linkedin'] ?? _user!.linkedin,
+          address: _user!.address,
+          about: _user!.about,
+          biography: responseData['biography'] ?? _user!.biography,
+          educations: _user!.educations,
+          photo: responseData['image'] ?? _user!.photo,
+          emailVerifiedAt: _user!.emailVerifiedAt,
+          paymentkeys: _user!.paymentkeys,
+          videoUrl: _user!.videoUrl,
+          createdAt: _user!.createdAt,
+          updatedAt: _user!.updatedAt,
+          token: _user!.token,
+        );
+      }
+      
       notifyListeners();
     } catch (error) {
       rethrow;
@@ -188,12 +140,44 @@ class Auth with ChangeNotifier {
           if (responseData['status'] != 'success') {
             throw const HttpException('Upload Failed');
           }
-          notifyListeners();
-          // print(value);
+          // Update user photo after successful upload
+          if (_user != null && responseData['image'] != null) {
+            _user = User(
+              id: _user!.id,
+              role: _user!.role,
+              email: _user!.email,
+              status: _user!.status,
+              syncedFromDashboard: _user!.syncedFromDashboard,
+              dashboardCustomerId: _user!.dashboardCustomerId,
+              lastSyncedAt: _user!.lastSyncedAt,
+              name: _user!.name,
+              phone: _user!.phone,
+              country: _user!.country,
+              gender: _user!.gender,
+              ageRange: _user!.ageRange,
+              yearsOfExperience: _user!.yearsOfExperience,
+              customerId: _user!.customerId,
+              website: _user!.website,
+              skills: _user!.skills,
+              facebook: _user!.facebook,
+              twitter: _user!.twitter,
+              linkedin: _user!.linkedin,
+              address: _user!.address,
+              about: _user!.about,
+              biography: _user!.biography,
+              educations: _user!.educations,
+              photo: responseData['image'],
+              emailVerifiedAt: _user!.emailVerifiedAt,
+              paymentkeys: _user!.paymentkeys,
+              videoUrl: _user!.videoUrl,
+              createdAt: _user!.createdAt,
+              updatedAt: _user!.updatedAt,
+              token: _user!.token,
+            );
+            notifyListeners();
+          }
         });
       }
-
-      // final responseData = json.decode(response.body);
     } catch (error) {
       rethrow;
     }
@@ -201,14 +185,15 @@ class Auth with ChangeNotifier {
 
   Future<void> logout() async {
     _token = null;
-    // _user = null;
+    _userId = null;
+    _user = null;
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('userData');
     prefs.clear();
   }
 
-  Future<void> updateUserData(User user) async {
+  Future<void> updateUserData(Map<String, dynamic> userData) async {
     final token = await SharedPreferenceHelper().getAuthToken();
     const url = '$BASE_URL/api/update_userdata';
 
@@ -217,13 +202,7 @@ class Auth with ChangeNotifier {
         Uri.parse(url),
         body: {
           'auth_token': token,
-          'first_name': user.firstName,
-          'last_name': user.lastName,
-          'email': user.email,
-          'biography': user.biography,
-          'twitter_link': user.twitter,
-          'facebook_link': user.facebook,
-          'linkedin_link': user.linkedIn,
+          ...userData, // Spread the user data map
         },
       );
 
@@ -232,14 +211,11 @@ class Auth with ChangeNotifier {
         throw const HttpException('Update Failed');
       }
 
-      _user.firstName = responseData['first_name'];
-      _user.lastName = responseData['last_name'];
-      _user.email = responseData['email'];
-      _user.image = responseData['image'];
-      _user.twitter = responseData['twitter'];
-      _user.linkedIn = responseData['linkedin'];
-      _user.biography = responseData['biography'];
-      notifyListeners();
+      // Update user with new data
+      if (_user != null && responseData['user'] != null) {
+        _user = User.fromJson(responseData['user']);
+        notifyListeners();
+      }
     } catch (error) {
       rethrow;
     }
@@ -266,6 +242,23 @@ class Auth with ChangeNotifier {
       }
     } catch (error) {
       rethrow;
+    }
+  }
+
+  // Helper method to load user from shared preferences
+  Future<void> loadUserFromPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userDataString = prefs.getString('userData');
+    
+    if (userDataString != null) {
+      final userData = json.decode(userDataString);
+      _token = userData['token'];
+      _userId = userData['user_id'];
+      
+      if (userData['user'] != null) {
+        _user = User.fromJson(userData['user']);
+        notifyListeners();
+      }
     }
   }
 }

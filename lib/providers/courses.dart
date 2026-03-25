@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:academy_app/models/course.dart';
 import 'package:academy_app/models/course_detail.dart';
 import 'package:academy_app/models/lesson.dart';
@@ -38,11 +39,14 @@ class Courses with ChangeNotifier {
   }
 
   Future<void> fetchTopCourses() async {
+    debugger();
     var url = '$BASE_URL/api/top_courses';
     try {
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as List;
       // ignore: unnecessary_null_comparison
+      log(response.body);
+      debugger();
       if (extractedData == null) {
         return;
       }
@@ -77,6 +81,7 @@ class Courses with ChangeNotifier {
         '$BASE_URL/api/courses_by_search_string?search_string=$searchQuery';
     // print(url);
     try {
+      debugger();
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as List;
       // ignore: unnecessary_null_comparison
@@ -136,30 +141,15 @@ class Courses with ChangeNotifier {
     }
   }
 
-  List<Course> buildCourseList(List extractedData) {
-    final List<Course> loadedCourses = [];
-    for (var courseData in extractedData) {
-      loadedCourses.add(Course(
-        id: int.parse(courseData['id']),
-        title: courseData['title'],
-        thumbnail: courseData['thumbnail'],
-        price: courseData['price'],
-        isFreeCourse: courseData['is_free_course'],
-        instructor: courseData['instructor_name'],
-        instructorImage: courseData['instructor_image'],
-        rating: courseData['rating'],
-        totalNumberRating: courseData['number_of_ratings'],
-        numberOfEnrollment: courseData['total_enrollment'],
-        shareableLink: courseData['shareable_link'],
-        courseOverviewProvider: courseData['course_overview_provider'],
-        courseOverviewUrl: courseData['video_url'],
-        vimeoVideoId: courseData['vimeo_video_id'],
-      ));
-      // print(catData['name']);
-    }
-    return loadedCourses;
+List<Course> buildCourseList(List extractedData) {
+  final List<Course> loadedCourses = [];
+  
+  for (var courseData in extractedData) {
+    loadedCourses.add(Course.fromJson(courseData));
   }
-
+  
+  return loadedCourses;
+}
   Future<void> toggleWishlist(int courseId, bool removeItem) async {
     var authToken = await SharedPreferenceHelper().getAuthToken();
     var url =

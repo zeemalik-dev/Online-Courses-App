@@ -253,7 +253,7 @@ class _BundleDetailsScreenState extends State<BundleDetailsScreen> {
                           instructorImage:
                               bundles[0].bundleCourses![index].instructorImage,
                           price: bundles[0].bundleCourses![index].price,
-                          rating: bundles[0].bundleCourses![index].rating,
+                          rating: bundles[0].bundleCourses![index].rating?.toDouble(),
                         );
                       },
                       itemCount: bundles[0].bundleCourses!.length,

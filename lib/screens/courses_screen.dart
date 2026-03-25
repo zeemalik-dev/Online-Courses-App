@@ -116,14 +116,14 @@ class _CoursesScreenState extends State<CoursesScreen> {
                       itemBuilder: (ctx, index) {
                         return Center(
                           child: CourseListItem(
-                            id: courseData[index].id!.toInt(),
+                            id: courseData[index].id.toInt(),
                             title: courseData[index].title.toString(),
                             thumbnail: courseData[index].thumbnail.toString(),
-                            rating: courseData[index].rating!.toInt(),
+                            rating: courseData[index].totalReviews.toInt(),
                             price: courseData[index].price.toString(),
-                            instructor: courseData[index].instructor.toString(),
+                            instructor: courseData[index].instructorName.toString(),
                             noOfRating:
-                                courseData[index].totalNumberRating!.toInt(),
+                                courseData[index].totalReviews.toInt(),
                           ),
                         );
                       },
