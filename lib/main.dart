@@ -3,6 +3,7 @@ import 'package:academy_app/providers/bundles.dart';
 import 'package:academy_app/providers/course_forum.dart';
 import 'package:academy_app/screens/account_remove_screen.dart';
 import 'package:academy_app/screens/auth_screen_private.dart';
+import 'package:academy_app/screens/check_out_screen.dart';
 import 'package:academy_app/screens/downloaded_course_list.dart';
 import 'package:academy_app/screens/edit_password_screen.dart';
 import 'package:academy_app/screens/edit_profile_screen.dart';
@@ -114,6 +115,7 @@ class MyApp extends StatelessWidget {
             MyBundleCoursesListScreen.routeName: (ctx) =>
                 const MyBundleCoursesListScreen(),
             DeviceVerificationScreen.routeName: (context) => const DeviceVerificationScreen(),
+            CheckoutSessionScreen.routeName: (ctx) => const CheckoutSessionScreen(course: null), // Placeholder, will be navigated with arguments
           },
         ),
       ),

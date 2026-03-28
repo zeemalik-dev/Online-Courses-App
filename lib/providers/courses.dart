@@ -39,14 +39,14 @@ class Courses with ChangeNotifier {
   }
 
   Future<void> fetchTopCourses() async {
-    debugger();
+    // debugger();
     var url = '$BASE_URL/api/top_courses';
     try {
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as List;
       // ignore: unnecessary_null_comparison
       log(response.body);
-      debugger();
+      // debugger();
       if (extractedData == null) {
         return;
       }
@@ -81,10 +81,11 @@ class Courses with ChangeNotifier {
         '$BASE_URL/api/courses_by_search_string?search_string=$searchQuery';
     // print(url);
     try {
-      debugger();
       final response = await http.get(Uri.parse(url));
       final extractedData = json.decode(response.body) as List;
       // ignore: unnecessary_null_comparison
+      log(response.body);
+      // debugger();
       if (extractedData == null) {
         return;
       }
@@ -184,52 +185,100 @@ List<Course> buildCourseList(List extractedData) {
     }
   }
 
-  Future<void> fetchCourseDetailById(int courseId) async {
-    var authToken = await SharedPreferenceHelper().getAuthToken();
-    var url = '$BASE_URL/api/course_details_by_id?course_id=$courseId';
+Future<void> fetchCourseDetailById(int courseId) async {
+  var authToken = await SharedPreferenceHelper().getAuthToken();
+  var url = '$BASE_URL/api/course_details_by_id?course_id=$courseId';
 
-    if (authToken != null) {
-      url =
-          '$BASE_URL/api/course_details_by_id?auth_token=$authToken&course_id=$courseId';
-    }
-
-    try {
-      final response = await http.get(Uri.parse(url));
-      final extractedData = json.decode(response.body) as List;
-      if (extractedData.isEmpty) {
-        return;
-      }
-
-      final List<CourseDetail> loadedCourseDetails = [];
-      for (var courseData in extractedData) {
-        loadedCourseDetails.add(CourseDetail(
-          courseId: int.parse(courseData['id']),
-          courseIncludes:
-              (courseData['includes'] as List<dynamic>).cast<String>(),
-          courseRequirements:
-              (courseData['requirements'] as List<dynamic>).cast<String>(),
-          courseOutcomes:
-              (courseData['outcomes'] as List<dynamic>).cast<String>(),
-          isWishlisted: courseData['is_wishlisted'],
-          isPurchased: (courseData['is_purchased'] is int)
-              ? courseData['is_purchased'] == 1
-                  ? true
-                  : false
-              : courseData['is_purchased'],
-          mSection:
-              buildCourseSections(courseData['sections'] as List<dynamic>),
-        ));
-      }
-      // print(loadedCourseDetails.first.courseOutcomes.last);
-      // _items = buildCourseList(extractedData);
-      _courseDetailsitems = loadedCourseDetails;
-      // _courseDetail = loadedCourseDetails.first;
-      notifyListeners();
-    } catch (error) {
-      rethrow;
-    }
+  if (authToken != null) {
+    url = '$BASE_URL/api/course_details_by_id?auth_token=$authToken&course_id=$courseId';
   }
 
+  try {
+    final response = await http.get(Uri.parse(url));
+    log(response.body);
+    // debugger();
+    
+    final extractedData = json.decode(response.body) as List;
+    if (extractedData.isEmpty) {
+      return;
+    }
+
+    final List<CourseDetail> loadedCourseDetails = [];
+    
+    for (var courseData in extractedData) {
+      // Handle outcomes - it might be a Map or List
+      List<String> outcomes = [];
+      if (courseData['outcomes'] != null) {
+        if (courseData['outcomes'] is Map) {
+          // If outcomes is a Map (like in your response)
+          outcomes = (courseData['outcomes'] as Map).values.map((e) => e.toString()).toList();
+        } else if (courseData['outcomes'] is List) {
+          // If outcomes is a List
+          outcomes = (courseData['outcomes'] as List<dynamic>).cast<String>();
+        }
+      }
+      
+      // Handle requirements - might be List or null
+      List<String> requirements = [];
+      if (courseData['requirements'] != null && courseData['requirements'] is List) {
+        requirements = (courseData['requirements'] as List<dynamic>).cast<String>();
+      }
+      
+      // Handle includes - might be List or null
+      List<String> includes = [];
+      if (courseData['includes'] != null && courseData['includes'] is List) {
+        includes = (courseData['includes'] as List<dynamic>).cast<String>();
+      }
+      
+      // Handle sections - ensure it's a list
+      List<dynamic> sections = [];
+      if (courseData['sections'] != null && courseData['sections'] is List) {
+        sections = courseData['sections'] as List<dynamic>;
+      }
+      
+      loadedCourseDetails.add(CourseDetail(
+        courseId: courseData['id'],
+        courseTitle: courseData['title'] ?? '',
+        courseSlug: courseData['slug'] ?? '',
+        shortDescription: courseData['short_description'] ?? '',
+        courseType: courseData['course_type'] ?? 'general',
+        status: courseData['status'] ?? '',
+        level: courseData['level'] ?? '',
+        deliveryMethod: courseData['delivery_method'] ?? '',
+        language: courseData['language'] ?? '',
+        isPaid: courseData['is_paid'] ?? 0,
+        isBest: courseData['is_best'] ?? 0,
+        price: courseData['price']?.toString() ?? '0',
+        discountedPrice: courseData['discounted_price'] ?? 0,
+        discountFlag: courseData['discount_flag'] ?? 0,
+        thumbnail: courseData['thumbnail'] ?? '',
+        banner: courseData['banner'] ?? '',
+        preview: courseData['preview'] ?? '',
+        description: courseData['description'] ?? '',
+        averageRating: double.parse(courseData['average_rating']?.toString() ?? '0'),
+        instructorName: courseData['instructor_name'] ?? '',
+        instructorImage: courseData['instructor_image'] ?? '',
+        totalEnrollment: courseData['total_enrollment'] ?? 0,
+        totalReviews: courseData['total_reviews'] ?? 0,
+        shareableLink: courseData['shareable_link'] ?? '',
+        courseIncludes: includes,
+        courseRequirements: requirements,
+        courseOutcomes: outcomes,
+        isWishlisted: courseData['is_wishlisted'] ?? false,
+        isPurchased: courseData['is_purchased'] == 1 ? true : (courseData['is_purchased'] ?? false),
+        isCart: courseData['is_cart'] ?? false,
+        mSection: buildCourseSections(sections),
+      ));
+    }
+    
+    _courseDetailsitems = loadedCourseDetails;
+    notifyListeners();
+  } catch (error) {
+    print('Error fetching course detail: $error');
+    rethrow;
+  }
+}  
+  
   Future<void> getEnrolled(int courseId) async {
     final authToken = await SharedPreferenceHelper().getAuthToken();
     var url =
@@ -246,47 +295,58 @@ List<Course> buildCourseList(List extractedData) {
       rethrow;
     }
   }
+List<Section> buildCourseSections(List extractedSections) {
+  final List<Section> loadedSections = [];
 
-  List<Section> buildCourseSections(List extractedSections) {
-    final List<Section> loadedSections = [];
-
-    for (var sectionData in extractedSections) {
-      loadedSections.add(Section(
-        id: int.parse(sectionData['id']),
-        numberOfCompletedLessons: sectionData['completed_lesson_number'],
-        title: sectionData['title'],
-        totalDuration: sectionData['total_duration'],
-        lessonCounterEnds: sectionData['lesson_counter_ends'],
-        lessonCounterStarts: sectionData['lesson_counter_starts'],
-        mLesson: buildCourseLessons(sectionData['lessons'] as List<dynamic>),
-      ));
-    }
-    // print(loadedSections.first.title);
-    return loadedSections;
+  for (var sectionData in extractedSections) {
+    loadedSections.add(
+      Section.fromJson(sectionData as Map<String, dynamic>)
+    //   Section(
+    //   id: sectionData['id'] is int 
+    //       ? sectionData['id'] 
+    //       : int.parse(sectionData['id'].toString()),
+    //   numberOfCompletedLessons: sectionData['completed_lesson_number'] ?? 0,
+    //   title: sectionData['title'] ?? '',
+    //   totalDuration: sectionData['total_duration'] ?? '00:00:00',
+    //   lessonCounterEnds: sectionData['lesson_counter_ends'] ?? 0,
+    //   lessonCounterStarts: sectionData['lesson_counter_starts'] ?? 0,
+    //   mLesson: sectionData['lessons'] != null 
+    //       ? buildCourseLessons(sectionData['lessons'] as List<dynamic>)
+    //       : [],
+    // )
+    )
+    ;
   }
+  return loadedSections;
+}
 
-  List<Lesson> buildCourseLessons(List extractedLessons) {
-    final List<Lesson> loadedLessons = [];
+List<Lesson> buildCourseLessons(List extractedLessons) {
+  final List<Lesson> loadedLessons = [];
 
-    for (var lessonData in extractedLessons) {
-      loadedLessons.add(Lesson(
-        id: int.parse(lessonData['id']),
-        title: lessonData['title'],
-        duration: lessonData['duration'],
-        lessonType: lessonData['lesson_type'],
-        isFree: lessonData['is_free'],
-        videoUrl: lessonData['video_url'],
-        summary: lessonData['summary'],
-        attachmentType: lessonData['attachment_type'],
-        attachment: lessonData['attachment'],
-        attachmentUrl: lessonData['attachment_url'],
-        isCompleted: lessonData['is_completed'].toString(),
-        videoUrlWeb: lessonData['video_url_web'],
-        videoTypeWeb: lessonData['video_type_web'],
-        vimeoVideoId: lessonData['vimeo_video_id'],
-      ));
-    }
-    // print(loadedLessons.first.title);
-    return loadedLessons;
+  for (var lessonData in extractedLessons) {
+    loadedLessons.add(
+      Lesson.fromJson(lessonData as Map<String, dynamic>)
+    //   Lesson(
+    //   id: lessonData['id'] is int 
+    //       ? lessonData['id'] 
+    //       : int.parse(lessonData['id'].toString()),
+    //   title: lessonData['title'] ?? '',
+    //   duration: lessonData['duration'] ?? '00:00:00',
+    //   lessonType: lessonData['lesson_type'] ?? '',
+    //   isFree: lessonData['is_free'] ?? 0,
+    //   videoUrl: lessonData['video_url'] ?? '',
+    //   summary: lessonData['summary'] ?? '',
+    //   attachmentType: lessonData['attachment_type'] ?? '',
+    //   attachment: lessonData['attachment'] ?? '',
+    //   attachmentUrl: lessonData['attachment_url'] ?? '',
+    //   isCompleted: lessonData['is_completed']?.toString() ?? '0',
+    //   videoUrlWeb: lessonData['video_url_web'] ?? '',
+    //   videoTypeWeb: lessonData['video_type_web'] ?? '',
+    //   vimeoVideoId: lessonData['vimeo_video_id'] ?? '',
+    // )
+    );
+  
   }
+  return loadedLessons;
+}
 }

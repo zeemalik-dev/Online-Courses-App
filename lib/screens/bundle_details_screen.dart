@@ -245,6 +245,7 @@ class _BundleDetailsScreenState extends State<BundleDetailsScreen> {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (ctx, index) {
                         return CourseGrid(
+                          courseType: bundles[0].bundleCourses![index].courseType,
                           id: int.parse(bundles[0].bundleCourses![index].id!),
                           title: bundles[0].bundleCourses![index].title,
                           thumbnail: bundles[0].bundleCourses![index].thumbnail,

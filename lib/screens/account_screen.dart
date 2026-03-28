@@ -142,49 +142,51 @@ class _AccountScreenState extends State<AccountScreen> {
           } else {
             if (dataSnapshot.error != null) {
               //error
-              return _connectionStatus == ConnectivityResult.none
-                  ? Center(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                              height: MediaQuery.of(context).size.height * .15),
-                          Image.asset(
-                            "assets/images/no_connection.png",
-                            height: MediaQuery.of(context).size.height * .35,
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.all(4.0),
-                            child: Text('There is no Internet connection'),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.all(4.0),
-                            child:
-                                Text('Please check your Internet connection'),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ElevatedButton.icon(
-                              onPressed: () {
+              return 
+              // _connectionStatus == ConnectivityResult.none
+                  // ? Center(
+                  //     child: Column(
+                  //       children: [
+                  //         SizedBox(
+                  //             height: MediaQuery.of(context).size.height * .15),
+                  //         Image.asset(
+                  //           "assets/images/no_connection.png",
+                  //           height: MediaQuery.of(context).size.height * .35,
+                  //         ),
+                  //         const Padding(
+                  //           padding: EdgeInsets.all(4.0),
+                  //           child: Text('There is no Internet connection'),
+                  //         ),
+                  //         const Padding(
+                  //           padding: EdgeInsets.all(4.0),
+                  //           child:
+                  //               Text('Please check your Internet connection'),
+                  //         ),
+                  //         Padding(
+                  //           padding: const EdgeInsets.all(8.0),
+                  //           child: ElevatedButton.icon(
+                  //             onPressed: () {
                                 
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) {
-                                  return const DownloadedCourseList();
-                                }));
-                              },
-                              style: ButtonStyle(
-                                  backgroundColor: WidgetStateColor.resolveWith(
-                                      _getTextColor)),
-                              icon: const Icon(Icons.download_done_rounded),
-                              label: const Text(
-                                'Play offline courses',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : Row(
+                  //               Navigator.push(context,
+                  //                   MaterialPageRoute(builder: (context) {
+                  //                 return const DownloadedCourseList();
+                  //               }));
+                  //             },
+                  //             style: ButtonStyle(
+                  //                 backgroundColor: WidgetStateColor.resolveWith(
+                  //                     _getTextColor)),
+                  //             icon: const Icon(Icons.download_done_rounded),
+                  //             label: const Text(
+                  //               'Play offline courses',
+                  //               style: TextStyle(color: Colors.white),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   )
+                  // : 
+                  Row(
                       children: [
                         IconButton(
                           icon: const Icon(Icons.logout),

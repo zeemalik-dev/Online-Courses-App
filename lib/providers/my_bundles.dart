@@ -205,15 +205,18 @@ class MyBundles with ChangeNotifier {
 
       final List<Section> loadedSections = [];
       for (var sectionData in extractedData) {
-        loadedSections.add(Section(
-          id: int.parse(sectionData['id']),
-          numberOfCompletedLessons: sectionData['completed_lesson_number'],
-          title: sectionData['title'],
-          totalDuration: sectionData['total_duration'],
-          lessonCounterEnds: sectionData['lesson_counter_ends'],
-          lessonCounterStarts: sectionData['lesson_counter_starts'],
-          mLesson: buildSectionLessons(sectionData['lessons'] as List<dynamic>),
-        ));
+        loadedSections.add(
+          Section.fromJson(sectionData)
+        //   Section(
+        //   id: int.parse(sectionData['id']),
+        //   numberOfCompletedLessons: sectionData['completed_lesson_number'],
+        //   title: sectionData['title'],
+        //   totalDuration: sectionData['total_duration'],
+        //   lessonCounterEnds: sectionData['lesson_counter_ends'],
+        //   lessonCounterStarts: sectionData['lesson_counter_starts'],
+        //   mLesson: buildSectionLessons(sectionData['lessons'] as List<dynamic>),
+        // )
+        );
       }
       _sectionItems = loadedSections;
       notifyListeners();
@@ -226,21 +229,24 @@ class MyBundles with ChangeNotifier {
     final List<Lesson> loadedLessons = [];
 
     for (var lessonData in extractedLessons) {
-      loadedLessons.add(Lesson(
-        id: int.parse(lessonData['id']),
-        title: lessonData['title'],
-        duration: lessonData['duration'],
-        lessonType: lessonData['lesson_type'],
-        videoUrl: lessonData['video_url'],
-        summary: lessonData['summary'],
-        attachmentType: lessonData['attachment_type'],
-        attachment: lessonData['attachment'],
-        attachmentUrl: lessonData['attachment_url'],
-        isCompleted: lessonData['is_completed'].toString(),
-        videoUrlWeb: lessonData['video_url_web'],
-        videoTypeWeb: lessonData['video_type_web'],
-        vimeoVideoId: lessonData['vimeo_video_id'],
-      ));
+      loadedLessons.add(
+        Lesson.fromJson(lessonData)
+      //   Lesson(
+      //   id: int.parse(lessonData['id']),
+      //   title: lessonData['title'],
+      //   duration: lessonData['duration'],
+      //   lessonType: lessonData['lesson_type'],
+      //   videoUrl: lessonData['video_url'],
+      //   summary: lessonData['summary'],
+      //   attachmentType: lessonData['attachment_type'],
+      //   attachment: lessonData['attachment'],
+      //   attachmentUrl: lessonData['attachment_url'],
+      //   isCompleted: lessonData['is_completed'].toString(),
+      //   videoUrlWeb: lessonData['video_url_web'],
+      //   videoTypeWeb: lessonData['video_type_web'],
+      //   vimeoVideoId: lessonData['vimeo_video_id'],
+      // )
+      );
     }
     // print(loadedLessons.first.title);
     return loadedLessons;

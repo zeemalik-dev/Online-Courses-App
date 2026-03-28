@@ -1,5 +1,4 @@
-// import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
+// user.dart
 import 'package:json_annotation/json_annotation.dart';
 part 'user.g.dart';
 
@@ -9,30 +8,30 @@ class User {
   String? role;
   String? email;
   int? status;
-  
+
   @JsonKey(name: 'synced_from_dashboard')
   int? syncedFromDashboard;
-  
+
   @JsonKey(name: 'dashboard_customer_id')
   dynamic dashboardCustomerId;
-  
+
   @JsonKey(name: 'last_synced_at')
   String? lastSyncedAt;
-  
+
   String? name;
   String? phone;
   String? country;
   String? gender;
-  
+
   @JsonKey(name: 'age_range')
   String? ageRange;
-  
+
   @JsonKey(name: 'years_of_experience')
   String? yearsOfExperience;
-  
+
   @JsonKey(name: 'customer_id')
   dynamic customerId;
-  
+
   String? website;
   String? skills;
   String? facebook;
@@ -43,21 +42,21 @@ class User {
   String? biography;
   dynamic educations;
   String? photo;
-  
+
   @JsonKey(name: 'email_verified_at')
   dynamic emailVerifiedAt;
-  
+
   dynamic paymentkeys;
-  
+
   @JsonKey(name: 'video_url')
   dynamic videoUrl;
-  
+
   @JsonKey(name: 'created_at')
   String? createdAt;
-  
+
   @JsonKey(name: 'updated_at')
   String? updatedAt;
-  
+
   String? token;
 
   User({
@@ -98,7 +97,6 @@ class User {
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }
 
-// Login response wrapper model
 @JsonSerializable()
 class LoginResponse {
   String? message;
@@ -111,8 +109,8 @@ class LoginResponse {
     this.token,
   });
 
-  factory LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);
+  factory LoginResponse.fromJson(Map<String, dynamic> json) =>
+      _$LoginResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$LoginResponseToJson(this);
-
 }

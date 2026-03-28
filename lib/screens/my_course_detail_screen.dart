@@ -87,7 +87,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
           Provider.of<MyCourses>(context, listen: false).sectionItems;
       setState(() {
         _isLoading = false;
-        _activeLesson = activeSections.first.mLesson!.first;
+        _activeLesson = activeSections.first.lessons.first;
       });
     });
 
@@ -278,7 +278,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
             Provider.of<MyCourses>(context, listen: false).sectionItems;
         setState(() {
           _isLoading = false;
-          _activeLesson = activeSections.first.mLesson!.first;
+          _activeLesson = activeSections.first.lessons.first;
         });
       });
     }
@@ -794,7 +794,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                       child: Align(
                                         alignment: Alignment.center,
                                         child: CustomText(
-                                          text: section.totalDuration!
+                                          text: section.totalDuration
                                               .split('.')
                                               .first,
                                           fontSize: 10,
@@ -826,7 +826,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                           ),
                                           child: CustomText(
                                             text:
-                                                '${section.mLesson!.length} Lessons',
+                                                '${section.lessons.length} Lessons',
                                             fontSize: 10,
                                             colors: kDarkGreyColor,
                                           ),
@@ -845,17 +845,17 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                               ? ListView.builder(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: section.mLesson!.length,
+                                  itemCount: section.lessons.length,
                                   itemBuilder: (ctx, indexLess) {
                                     // return LessonListItem(
-                                    //   lesson: section.mLesson[index],
+                                    //   lesson: section.lessonsindex],
                                     // );
-                                    final lesson = section.mLesson![indexLess];
+                                    final lesson = section.lessons[indexLess];
                                     return InkWell(
                                       onTap: () {
                                         if (sections[0].id == section.id) {
                                           if (indexLess != 0) {
-                                            if (section.mLesson![indexLess - 1]
+                                            if (section.lessons[indexLess - 1]
                                                     .isCompleted !=
                                                 '1') {
                                               CommonFunctions.showWarningToast(
@@ -874,7 +874,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                           }
                                         } else {
                                           if (sections[index - 1]
-                                                  .mLesson!
+                                                  .lessons
                                                   .last
                                                   .isCompleted !=
                                               '1') {
@@ -961,7 +961,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                                                     }),
                                                               )
                                                         : section
-                                                                    .mLesson![
+                                                                    .lessons[
                                                                         indexLess -
                                                                             1]
                                                                     .isCompleted !=
@@ -1012,7 +1012,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                                                         }),
                                                                   )
                                                     : sections[index - 1]
-                                                                .mLesson!
+                                                                .lessons
                                                                 .last
                                                                 .isCompleted !=
                                                             '1'
@@ -1126,7 +1126,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                                 //               ),
                                                 //             )
                                                 //           : section
-                                                //                       .mLesson![
+                                                //                       .lessons[
                                                 //                           indexLess -
                                                 //                               1]
                                                 //                       .isCompleted ==
@@ -1156,7 +1156,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                                 //                 )
                                                 //               : Container()
                                                 //       : sections[index - 1]
-                                                //                   .mLesson!
+                                                //                   .lessons
                                                 //                   .last
                                                 //                   .isCompleted !=
                                                 //               '1'
@@ -1191,7 +1191,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                         ],
                                       ),
                                     );
-                                    // return Text(section.mLesson[index].title);
+                                    // return Text(section.lessonsindex].title);
                                   },
                                 )
                               : ListView.builder(
@@ -1199,9 +1199,9 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (ctx, index) {
                                     // return LessonListItem(
-                                    //   lesson: section.mLesson[index],
+                                    //   lesson: section.lessonsindex],
                                     // );
-                                    final lesson = section.mLesson![index];
+                                    final lesson = section.lessons[index];
                                     return InkWell(
                                       onTap: () {
                                         setState(() {
@@ -1318,9 +1318,9 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                         ],
                                       ),
                                     );
-                                    // return Text(section.mLesson[index].title);
+                                    // return Text(section.lessonsindex].title);
                                   },
-                                  itemCount: section.mLesson!.length,
+                                  itemCount: section.lessons.length,
                                 ),
                         ],
                       ),
@@ -1404,7 +1404,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                   child: Align(
                                     alignment: Alignment.center,
                                     child: CustomText(
-                                      text: section.totalDuration!
+                                      text: section.totalDuration
                                           .split('.')
                                           .first,
                                       fontSize: 10,
@@ -1435,7 +1435,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                       ),
                                       child: CustomText(
                                         text:
-                                            '${section.mLesson!.length} Lessons',
+                                            '${section.lessons.length} Lessons',
                                         fontSize: 10,
                                         colors: kDarkGreyColor,
                                       ),
@@ -1454,17 +1454,17 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                           ? ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: section.mLesson!.length,
+                              itemCount: section.lessons.length,
                               itemBuilder: (ctx, indexLess) {
                                 // return LessonListItem(
-                                //   lesson: section.mLesson[index],
+                                //   lesson: section.lessonsindex],
                                 // );
-                                final lesson = section.mLesson![indexLess];
+                                final lesson = section.lessons[indexLess];
                                 return InkWell(
                                   onTap: () {
                                     if (sections[0].id == section.id) {
                                       if (indexLess != 0) {
-                                        if (section.mLesson![indexLess - 1]
+                                        if (section.lessons[indexLess - 1]
                                                 .isCompleted !=
                                             '1') {
                                           CommonFunctions.showWarningToast(
@@ -1483,7 +1483,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                       }
                                     } else {
                                       if (sections[index - 1]
-                                              .mLesson!
+                                              .lessons
                                               .last
                                               .isCompleted !=
                                           '1') {
@@ -1585,7 +1585,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                                                 }),
                                                           )
                                                     : section
-                                                                .mLesson![
+                                                                .lessons[
                                                                     indexLess -
                                                                         1]
                                                                 .isCompleted !=
@@ -1657,7 +1657,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                                                     }),
                                                               )
                                                 : sections[index - 1]
-                                                            .mLesson!
+                                                            .lessons
                                                             .last
                                                             .isCompleted !=
                                                         '1'
@@ -1787,7 +1787,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                             //               ),
                                             //             )
                                             //           : section
-                                            //                       .mLesson![
+                                            //                       .lessons[
                                             //                           indexLess -
                                             //                               1]
                                             //                       .isCompleted ==
@@ -1815,7 +1815,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                             //                 )
                                             //               : Container()
                                             //       : sections[index - 1]
-                                            //                   .mLesson!
+                                            //                   .lessons
                                             //                   .last
                                             //                   .isCompleted !=
                                             //               '1'
@@ -1850,18 +1850,18 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                     ],
                                   ),
                                 );
-                                // return Text(section.mLesson[index].title);
+                                // return Text(section.lessonsindex].title);
                               },
                             )
                           : ListView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: section.mLesson!.length,
+                              itemCount: section.lessons.length,
                               itemBuilder: (ctx, indexLess) {
                                 // return LessonListItem(
-                                //   lesson: section.mLesson[index],
+                                //   lesson: section.lessonsindex],
                                 // );
-                                final lesson = section.mLesson![indexLess];
+                                final lesson = section.lessons[indexLess];
                                 return InkWell(
                                   onTap: () {
                                     setState(() {
@@ -1968,7 +1968,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
                                     ],
                                   ),
                                 );
-                                // return Text(section.mLesson[index].title);
+                                // return Text(section.lessonsindex].title);
                               },
                             ),
                     ],

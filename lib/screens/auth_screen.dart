@@ -102,7 +102,7 @@ class _AuthScreenState extends State<AuthScreen> {
       _authData['password'].toString(),
     ).then((_) {
       
-debugger();
+// debugger();
       setState(() {
         _isLoading = false;
         userDetails = Provider.of<Auth>(context, listen: false).user;

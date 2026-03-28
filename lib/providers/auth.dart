@@ -34,7 +34,7 @@ class Auth with ChangeNotifier {
       final response = await http.post(Uri.parse(url));
       final responseData = json.decode(response.body);
       log(responseData.toString());
-debugger();
+// debugger();
       if (response.statusCode == 200 || response.statusCode == 201) {
         // Parse the login response using LoginResponse model
         final loginResponse = LoginResponse.fromJson(responseData);

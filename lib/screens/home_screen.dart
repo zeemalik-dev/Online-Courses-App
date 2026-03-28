@@ -1,10 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'dart:developer';
 import 'package:academy_app/models/course.dart';
 import 'package:academy_app/providers/bundles.dart';
-import 'package:academy_app/widgets/bundle_grid.dart';
 import '../providers/categories.dart';
 import '../widgets/category_list_item.dart';
 import '../widgets/course_grid.dart';
@@ -14,8 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../constants.dart';
-import 'bundle_list_screen.dart';
-import 'courses_screen.dart';
 import '../models/common_functions.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -30,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var _isLoading = false;
   List<Course> _topCourses = [];
   List<dynamic> _bundles = [];
-  bool _bundleStatus = false;
+  bool _categoriesLoaded = false;
 
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
@@ -61,9 +57,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-    setState(() {
-      _connectionStatus = result;
-    });
+    if (mounted) {
+      setState(() {
+        _connectionStatus = result;
+      });
+    }
   }
 
   @override
@@ -76,24 +74,37 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadInitialData() async {
+    // Prevent multiple loads
+    if (_isLoading) return;
+    
     setState(() {
       _isLoading = true;
     });
 
     try {
       // Load top courses
-      await Provider.of<Courses>(context, listen: false).fetchTopCourses();
-      _topCourses = Provider.of<Courses>(context, listen: false).topItems;
+      final coursesProvider = Provider.of<Courses>(context, listen: false);
+      await coursesProvider.fetchCoursesBySearchQuery('');
+      
+      if (mounted) {
+        setState(() {
+          _topCourses = coursesProvider.items;
+        });
+      }
 
-      // Load bundles
-      await Provider.of<Bundles>(context, listen: false).fetchBundle(true);
-      _bundles = Provider.of<Bundles>(context, listen: false).bundleItems;
-
-      // Load filter courses
-      await Provider.of<Courses>(context, listen: false)
-          .filterCourses('all', 'all', 'all', 'all', 'all');
+      // Load bundles (uncomment when ready)
+      // final bundlesProvider = Provider.of<Bundles>(context, listen: false);
+      // await bundlesProvider.fetchBundle(true);
+      // if (mounted) {
+      //   setState(() {
+      //     _bundles = bundlesProvider.bundleItems;
+      //   });
+      // }
     } catch (error) {
       print('Error loading data: $error');
+      if (mounted) {
+        CommonFunctions.showErrorDialog('Error loading data', context);
+      }
     } finally {
       if (mounted) {
         setState(() {
@@ -104,18 +115,23 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> refreshList() async {
+    if (_isLoading) return;
+    
     try {
       setState(() {
         _isLoading = true;
       });
       
-      await Provider.of<Courses>(context, listen: false).fetchTopCourses();
-      await Provider.of<Bundles>(context, listen: false).fetchBundle(true);
+      final coursesProvider = Provider.of<Courses>(context, listen: false);
+      await coursesProvider.fetchCoursesBySearchQuery('');
+      
+      final bundlesProvider = Provider.of<Bundles>(context, listen: false);
+      await bundlesProvider.fetchBundle(true);
       
       if (mounted) {
         setState(() {
-          _topCourses = Provider.of<Courses>(context, listen: false).topItems;
-          _bundles = Provider.of<Bundles>(context, listen: false).bundleItems;
+          _topCourses = coursesProvider.topItems;
+          _bundles = bundlesProvider.bundleItems;
           _isLoading = false;
         });
       }
@@ -141,260 +157,262 @@ class _HomeScreenState extends State<HomeScreen> {
     return RefreshIndicator(
       onRefresh: refreshList,
       child: SingleChildScrollView(
-        child: FutureBuilder(
-          future:
-              Provider.of<Categories>(context, listen: false).fetchCategories(),
-          builder: (ctx, dataSnapshot) {
-            if (dataSnapshot.connectionState == ConnectionState.waiting) {
-              return SizedBox(
-                height: MediaQuery.of(context).size.height * .5,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: kPrimaryColor.withOpacity(0.7),
-                  ),
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Hero Section with Header
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    kPrimaryColor.withOpacity(0.1),
+                    kPrimaryColor.withOpacity(0.05),
+                  ],
                 ),
-              );
-            } else {
-              if (dataSnapshot.error != null) {
-                return _connectionStatus == ConnectivityResult.none
-                    ? Center(
-                        child: Column(
-                          children: [
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * .15),
-                            Image.asset(
-                              "assets/images/no_connection.png",
-                              height: MediaQuery.of(context).size.height * .35,
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Text('There is no Internet connection'),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child:
-                                  Text('Please check your Internet connection'),
-                            ),
-                          ],
-                        ),
-                      )
-                    : const Center(
-                        child: Text('Error Occurred'),
-                      );
-              } else {
-                return Column(
-                  children: [
-                    // Top Courses Section
-                    if (_topCourses.isNotEmpty)
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            const Text(
-                              'Top Courses',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 18),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pushNamed(
-                                  CoursesScreen.routeName,
-                                  arguments: {
-                                    'category_id': null,
-                                    'seacrh_query': null,
-                                    'type': 'all',
-                                  },
-                                );
-                              },
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                minimumSize: const Size(50, 30),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Text('All courses'),
-                                  Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    color: kPrimaryColor.withOpacity(0.7),
-                                    size: 18,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    
-                    _isLoading
-                        ? const Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : _topCourses.isNotEmpty
-                            ? Container(
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 0.0),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                height: 260.0,
-                                child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (ctx, index) {
-                                    final course = _topCourses[index];
-                                    log(course.thumbnail.toString());
-                                    return CourseGrid(
-                                      id: course.id,
-                                      title: course.title,
-                                      thumbnail: course.thumbnail,
-                                      instructorName: course.instructorName,
-                                      instructorImage: course.instructorImage,
-                                      rating: course.averageRating.toDouble(),
-                                      price: course.price,
-                                    );
-                                  },
-                                  itemCount: _topCourses.length,
-                                ),
-                              )
-                            : const SizedBox(height: 0),
-
-                    // Bundles Section
-                    if (_bundles.isNotEmpty)
-                      Column(
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                const Text(
-                                  'Bundles',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pushNamed(
-                                      BundleListScreen.routeName,
-                                    );
-                                  },
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                    minimumSize: const Size(50, 30),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const Text('All bundles'),
-                                      Icon(
-                                        Icons.arrow_forward_ios_rounded,
-                                        color: kPrimaryColor.withOpacity(0.7),
-                                        size: 18,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 0.0),
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20),
-                            height: 240.0,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (ctx, index) {
-                                final bundle = _bundles[index];
-                                return BundleGrid(
-                                  id: bundle.id,
-                                  title: bundle.title,
-                                  banner: bundle.banner?.startsWith('http') == true
-                                      ? bundle.banner
-                                      : '$BASE_URL/uploads/course_bundle/banner/${bundle.banner}',
-                                  averageRating: bundle.averageRating ?? 0.0,
-                                  numberOfRatings: bundle.numberOfRatings ?? 0,
-                                  price: bundle.price,
-                                );
-                              },
-                              itemCount: _bundles.length,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                    // Categories Section
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const Text(
-                            'Course Categories',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 18),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pushNamed(
-                                CoursesScreen.routeName,
-                                arguments: {
-                                  'category_id': null,
-                                  'seacrh_query': null,
-                                  'type': 'all',
-                                },
-                              );
-                            },
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: const Size(50, 30),
-                            ),
-                            child: Row(
-                              children: [
-                                const Text('All courses'),
-                                Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  color: kPrimaryColor.withOpacity(0.7),
-                                  size: 18,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'COURSES',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: kPrimaryColor,
+                      letterSpacing: 1.2,
                     ),
-                    
-                    Consumer<Categories>(
-                      builder: (context, categoriesData, child) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (ctx, index) {
-                            final category = categoriesData.items[index];
-                            return CategoryListItem(
-                              id: category.id,
-                              title: category.title,
-                              thumbnail: category.thumbnail,
-                              numberOfSubCategories: category.numberOfSubCategories,
-                            );
-                          },
-                          itemCount: categoriesData.items.length,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Browse our comprehensive collection of leadership and professional development courses designed for women at every stage of their career.',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey[700],
+                      height: 1.4,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Showing courses count
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Showing ${_topCourses.length} courses',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
+                      // Filter & Sort button
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey[300]!),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.filter_list,
+                              size: 18,
+                              color: Colors.grey[700],
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              'Filter & Sort',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Loading State
+            if (_isLoading && _topCourses.isEmpty)
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(32.0),
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            
+            // Top Courses Section - Vertical List
+            if (_topCourses.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
+                    // Section header with accent line
+                    Row(
+                      children: [
+                        Container(
+                          width: 4,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: kPrimaryColor,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        const Text(
+                          'COURSE',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    // Vertical list of courses
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (ctx, index) {
+                        final course = _topCourses[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: _buildStyledCourseCard(course),
+                        );
+                      },
+                      itemCount: _topCourses.length,
                     ),
                   ],
-                );
-              }
-            }
-          },
+                ),
+              ),
+
+            const SizedBox(height: 24),
+
+            // Categories Section with FutureBuilder for async loading
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 4,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: kPrimaryColor,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      const Text(
+                        'COURSE CATEGORIES',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  FutureBuilder(
+                    future: Provider.of<Categories>(context, listen: false).fetchCategories(),
+                    builder: (ctx, dataSnapshot) {
+                      if (dataSnapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(32.0),
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      } else if (dataSnapshot.hasError) {
+                        return Center(
+                          child: Column(
+                            children: [
+                              const Icon(Icons.error_outline, size: 48, color: Colors.grey),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Error loading categories',
+                                style: TextStyle(color: Colors.grey[600]),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {});
+                                },
+                                child: const Text('Retry'),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return Consumer<Categories>(
+                          builder: (context, categoriesData, child) {
+                            if (categoriesData.items.isEmpty) {
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(32.0),
+                                  child: Text('No categories available'),
+                                ),
+                              );
+                            }
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (ctx, index) {
+                                final category = categoriesData.items[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 12),
+                                  child: CategoryListItem(
+                                    id: category.id,
+                                    title: category.title,
+                                    thumbnail: category.thumbnail,
+                                    numberOfSubCategories: category.numberOfSubCategories,
+                                  ),
+                                );
+                              },
+                              itemCount: categoriesData.items.length,
+                            );
+                          },
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+            
+            const SizedBox(height: 32),
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildStyledCourseCard(Course course) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: CourseGrid(
+        courseType: course.courseType,
+        id: course.id,
+        title: course.title,
+        instructorName: course.instructorName,
+        instructorImage: course.instructorImage,
+        rating: course.averageRating,
+        price: course.price,
       ),
     );
   }
