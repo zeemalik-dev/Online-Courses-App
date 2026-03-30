@@ -1,17 +1,17 @@
 // ignore_for_file: deprecated_member_use, use_build_context_synchronously, prefer_const_constructors
 
-import 'package:academy_app/models/common_functions.dart';
-import 'package:academy_app/models/course.dart';
-import 'package:academy_app/providers/shared_pref_helper.dart';
-import 'package:academy_app/screens/check_out_screen.dart';
-import 'package:academy_app/widgets/course_card_widget.dart';
-import 'package:academy_app/widgets/custom_text.dart';
-import 'package:academy_app/widgets/from_vimeo_player.dart';
-import 'package:academy_app/widgets/lesson_list_item.dart';
-import 'package:academy_app/widgets/new_youtube_player.dart';
-import 'package:academy_app/widgets/star_display_widget.dart';
-import 'package:academy_app/widgets/tab_view_details.dart';
-import 'package:academy_app/widgets/util.dart';
+import 'package:wilan/models/common_functions.dart';
+import 'package:wilan/models/course.dart';
+import 'package:wilan/providers/shared_pref_helper.dart';
+import 'package:wilan/screens/check_out_screen.dart';
+import 'package:wilan/widgets/course_card_widget.dart';
+import 'package:wilan/widgets/custom_text.dart';
+import 'package:wilan/widgets/from_vimeo_player.dart';
+import 'package:wilan/widgets/lesson_list_item.dart';
+import 'package:wilan/widgets/new_youtube_player.dart';
+import 'package:wilan/widgets/star_display_widget.dart';
+import 'package:wilan/widgets/tab_view_details.dart';
+import 'package:wilan/widgets/util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -31,7 +31,8 @@ class CourseDetailScreen extends StatefulWidget {
 }
 
 class _CourseDetailScreenState extends State<CourseDetailScreen>
-    with TickerProviderStateMixin {  // ← Changed to TickerProviderStateMixin
+    with TickerProviderStateMixin {
+  // ← Changed to TickerProviderStateMixin
   late TabController _tabController;
   late TabController _infoTabController;
 
@@ -59,11 +60,12 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
 
       courseId = ModalRoute.of(context)!.settings.arguments as int;
 
-      loadedCourse = Provider.of<Courses>(context, listen: false).findById(courseId);
+      loadedCourse =
+          Provider.of<Courses>(context, listen: false).findById(courseId);
 
       await Provider.of<Courses>(context, listen: false)
           .fetchCourseDetailById(courseId);
-      
+
       if (mounted) {
         setState(() {
           _isLoading = false;
@@ -73,7 +75,6 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
     _isInit = false;
     super.didChangeDependencies();
   }
-
 
   @override
   void initState() {
@@ -102,13 +103,13 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
           : Consumer<Courses>(
               builder: (context, courses, child) {
                 final courseDetail = courses.getCourseDetail;
-                
+
                 if (courseDetail.courseId == null) {
                   return const Center(
                     child: Text('No course details available'),
                   );
                 }
-                
+
                 return SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,8 +124,8 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: NetworkImage(
-                                  courseDetail.thumbnail ?? 
-                                  (loadedCourse?.thumbnail ?? ''),
+                                  courseDetail.thumbnail ??
+                                      (loadedCourse?.thumbnail ?? ''),
                                 ),
                                 fit: BoxFit.cover,
                               ),
@@ -160,29 +161,33 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                           Center(
                             child: InkWell(
                               onTap: () {
-                                if (courseDetail.preview != null && 
+                                if (courseDetail.preview != null &&
                                     courseDetail.preview!.isNotEmpty) {
                                   if (courseDetail.preview!.contains('vimeo')) {
-                                    String vimeoVideoId = courseDetail.preview!
-                                        .split('/')
-                                        .last;
+                                    String vimeoVideoId =
+                                        courseDetail.preview!.split('/').last;
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 FromVimeoPlayer(
-                                                    courseId: courseDetail.courseId!,
+                                                    courseId:
+                                                        courseDetail.courseId!,
                                                     vimeoVideoId:
                                                         vimeoVideoId)));
-                                  } else if (courseDetail.preview!.contains('youtube') ||
-                                             courseDetail.preview!.contains('youtu.be')) {
+                                  } else if (courseDetail.preview!
+                                          .contains('youtube') ||
+                                      courseDetail.preview!
+                                          .contains('youtu.be')) {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               YoutubeVideoPlayerFlutter(
-                                                  courseId: courseDetail.courseId!,
-                                                  videoUrl: courseDetail.preview!),
+                                                  courseId:
+                                                      courseDetail.courseId!,
+                                                  videoUrl:
+                                                      courseDetail.preview!),
                                         ));
                                   } else {
                                     CommonFunctions.showSuccessToast(
@@ -217,7 +222,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                           ),
                         ],
                       ),
-                      
+
                       // Course Title Section
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -225,7 +230,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              courseDetail.courseTitle ?? loadedCourse?.title ?? '',
+                              courseDetail.courseTitle ??
+                                  loadedCourse?.title ??
+                                  '',
                               style: const TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
@@ -234,7 +241,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                               ),
                             ),
                             const SizedBox(height: 12),
-                            
+
                             // Short Description
                             if (loadedCourse?.shortDescription != null)
                               Text(
@@ -246,20 +253,25 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                                 ),
                               ),
                             const SizedBox(height: 16),
-                            
                           ],
                         ),
                       ),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // ✅ COURSE CARD WIDGET (ADDED HERE)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: CourseCardWidget(
                           course: courses.items[0],
                           onEnrollTap: () async {
-                          Navigator.push(context, CupertinoDialogRoute(builder: (_)=>CheckoutSessionScreen(course: courses.items[0],), context: context));
+                            Navigator.push(
+                                context,
+                                CupertinoDialogRoute(
+                                    builder: (_) => CheckoutSessionScreen(
+                                          course: courses.items[0],
+                                        ),
+                                    context: context));
                           },
                           onWishlistTap: () {
                             if (_isAuth) {
@@ -280,11 +292,12 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                           },
                         ),
                       ),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // About Program Section
-                      if (courseDetail.description != null && courseDetail.description!.isNotEmpty)
+                      if (courseDetail.description != null &&
+                          courseDetail.description!.isNotEmpty)
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Column(
@@ -324,9 +337,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                             ],
                           ),
                         ),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // What's Included Section (START Framework)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -350,20 +363,25 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                               ),
                               child: Column(
                                 children: [
-                                  _buildFrameworkItem('S', 'Self', 'Identity, strengths, values, and career direction'),
-                                  _buildFrameworkItem('T', 'Trust', 'Confidence built through proof, practice, and boundaries'),
-                                  _buildFrameworkItem('A', 'Articulate', 'Clear speaking, writing, feedback, and professional relationships'),
-                                  _buildFrameworkItem('R', 'Resources', 'Money habits that create stability and options'),
-                                  _buildFrameworkItem('T', 'Track', 'Weekly review to ensure progress is intentional, not accidental'),
+                                  _buildFrameworkItem('S', 'Self',
+                                      'Identity, strengths, values, and career direction'),
+                                  _buildFrameworkItem('T', 'Trust',
+                                      'Confidence built through proof, practice, and boundaries'),
+                                  _buildFrameworkItem('A', 'Articulate',
+                                      'Clear speaking, writing, feedback, and professional relationships'),
+                                  _buildFrameworkItem('R', 'Resources',
+                                      'Money habits that create stability and options'),
+                                  _buildFrameworkItem('T', 'Track',
+                                      'Weekly review to ensure progress is intentional, not accidental'),
                                 ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // Tab Section (Includes, Outcomes, Requirements)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -377,6 +395,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                               SizedBox(
                                 width: double.infinity,
                                 child: TabBar(
+                                  dividerColor: Colors.transparent,
                                   controller: _infoTabController,
                                   indicatorSize: TabBarIndicatorSize.tab,
                                   indicator: BoxDecoration(
@@ -397,9 +416,12 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                                 child: TabBarView(
                                   controller: _infoTabController,
                                   children: [
-                                    _buildInfoList(courseDetail.courseIncludes ?? []),
-                                    _buildInfoList(courseDetail.courseOutcomes ?? []),
-                                    _buildInfoList(courseDetail.courseRequirements ?? []),
+                                    _buildInfoList(
+                                        courseDetail.courseIncludes ?? []),
+                                    _buildInfoList(
+                                        courseDetail.courseOutcomes ?? []),
+                                    _buildInfoList(
+                                        courseDetail.courseRequirements ?? []),
                                   ],
                                 ),
                               ),
@@ -407,9 +429,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                           ),
                         ),
                       ),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // Course Curriculum
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20),
@@ -423,7 +445,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                         ),
                       ),
                       const SizedBox(height: 12),
-                      
+
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: ListView.builder(
@@ -455,10 +477,12 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                                     });
                                   }),
                                   title: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        HtmlUnescape().convert(section.title.toString()),
+                                        HtmlUnescape()
+                                            .convert(section.title.toString()),
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,
@@ -475,10 +499,11 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                                             ),
                                             decoration: BoxDecoration(
                                               color: kTimeBackColor,
-                                              borderRadius: BorderRadius.circular(4),
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
                                             ),
                                             child: Text(
-                                              section.totalDuration??'0.0',
+                                              section.totalDuration ?? '0.0',
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 color: kTimeColor,
@@ -493,7 +518,8 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                                             ),
                                             decoration: BoxDecoration(
                                               color: kLessonBackColor,
-                                              borderRadius: BorderRadius.circular(4),
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
                                             ),
                                             child: Text(
                                               '${section.lessons.length} Lessons',
@@ -510,19 +536,22 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                                   children: [
                                     ListView.builder(
                                       shrinkWrap: true,
-                                      physics: const NeverScrollableScrollPhysics(),
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       itemBuilder: (ctx, lessonIndex) {
                                         return Column(
                                           children: [
                                             LessonListItem(
-                                              lesson: section.lessons[lessonIndex],
+                                              lesson:
+                                                  section.lessons[lessonIndex],
                                               courseId: courseDetail.courseId!,
                                             ),
                                             if (lessonIndex <
                                                 section.lessons.length - 1)
                                               Divider(
                                                 height: 1,
-                                                color: Colors.grey.withOpacity(0.2),
+                                                color: Colors.grey
+                                                    .withOpacity(0.2),
                                               ),
                                           ],
                                         );
@@ -536,7 +565,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
                           },
                         ),
                       ),
-                      
+
                       const SizedBox(height: 40),
                     ],
                   ),
@@ -545,7 +574,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
             ),
     );
   }
-  
+
   Widget _buildFrameworkItem(String letter, String title, String description) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
@@ -599,7 +628,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
       ),
     );
   }
-  
+
   Widget _buildInfoList(List<String> items) {
     if (items.isEmpty) {
       return const Center(
@@ -637,7 +666,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
       },
     );
   }
-  
+
   Widget _buildFAQItem(Map<String, dynamic> faq) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -673,7 +702,7 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
       ),
     );
   }
-  
+
   String _getCategoryLevel(String? level) {
     switch (level?.toLowerCase()) {
       case 'beginner':
@@ -686,12 +715,12 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
         return 'COURSE';
     }
   }
-  
+
   String _getTotalDuration(List? sections) {
     // Calculate total duration from sections
     return '6 Weeks • 2 Sessions/Week';
   }
-  
+
   String _formatPrice(dynamic price) {
     if (price == null) return '0';
     if (price is String) return price.replaceAll('₦', '');
@@ -703,9 +732,9 @@ class _CourseDetailScreenState extends State<CourseDetailScreen>
 class HtmlWidget extends StatelessWidget {
   final String html;
   final TextStyle? textStyle;
-  
+
   const HtmlWidget(this.html, {this.textStyle, super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     // Remove HTML tags for simplicity
@@ -717,7 +746,7 @@ class HtmlWidget extends StatelessWidget {
         .replaceAll('&gt;', '>')
         .replaceAll('&quot;', '"')
         .replaceAll('&#39;', "'");
-    
+
     return Text(
       plainText,
       style: textStyle,

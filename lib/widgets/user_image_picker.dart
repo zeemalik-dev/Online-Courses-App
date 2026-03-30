@@ -2,9 +2,9 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'package:academy_app/models/common_functions.dart';
-import 'package:academy_app/providers/auth.dart';
-import 'package:academy_app/providers/shared_pref_helper.dart';
+import 'package:wilan/models/common_functions.dart';
+import 'package:wilan/providers/auth.dart';
+import 'package:wilan/providers/shared_pref_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -112,7 +112,8 @@ class _UserImagePickerState extends State<UserImagePicker> {
         if (_image != null)
           _isLoading
               ? Center(
-                  child: CircularProgressIndicator(color: kPrimaryColor.withOpacity(0.7)),
+                  child: CircularProgressIndicator(
+                      color: kPrimaryColor.withOpacity(0.7)),
                 )
               : ElevatedButton.icon(
                   onPressed: _submitImage,

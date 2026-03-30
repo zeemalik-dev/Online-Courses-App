@@ -2,8 +2,8 @@
 
 import 'dart:developer';
 
-import 'package:academy_app/models/common_functions.dart';
-import 'package:academy_app/models/update_user_model.dart';
+import 'package:wilan/models/common_functions.dart';
+import 'package:wilan/models/update_user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../constants.dart';
@@ -25,7 +25,7 @@ Future<UpdateUserModel> signUp(
   final payload = {
     // 'first_name': firstName,
     // 'last_name': lastName,
-    'name':firstName +' '+lastName,
+    'name': firstName + ' ' + lastName,
     'email': email,
     'password': password,
     // 'password':password,
@@ -34,15 +34,15 @@ Future<UpdateUserModel> signUp(
   final response = await http.post(Uri.parse(apiUrl), body: {
     // 'first_name': firstName,
     // 'last_name': lastName,
-    'name':firstName +' '+lastName,
+    'name': firstName + ' ' + lastName,
     'email': email,
     'password': password,
-    'password_confirmation':password
+    'password_confirmation': password
     // 'password':password,
   });
-log(response.body);
-    // debugger();
-  if (response.statusCode == 200||response.statusCode==201) {
+  log(response.body);
+  // debugger();
+  if (response.statusCode == 200 || response.statusCode == 201) {
     final String responseString = response.body;
 
     return updateUserModelFromJson(responseString);

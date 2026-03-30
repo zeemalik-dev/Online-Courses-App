@@ -1,5 +1,5 @@
-import 'package:academy_app/models/common_functions.dart';
-import 'package:academy_app/providers/courses.dart';
+import 'package:wilan/models/common_functions.dart';
+import 'package:wilan/providers/courses.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -70,7 +70,8 @@ buildPopupDialogWishList(BuildContext context, isWishlisted, id, msg) {
           Navigator.of(context).pop();
           var msg = isWishlisted ? 'Remove from Wishlist' : 'Added to Wishlist';
           CommonFunctions.showSuccessToast(msg);
-          Provider.of<Courses>(context, listen: false).toggleWishlist(id, false);
+          Provider.of<Courses>(context, listen: false)
+              .toggleWishlist(id, false);
         },
         textColor: Theme.of(context).primaryColor,
         child: const Text(

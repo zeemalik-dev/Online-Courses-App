@@ -1,8 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'package:academy_app/models/all_category.dart';
-import 'package:academy_app/models/category.dart';
+import 'package:wilan/models/all_category.dart';
+import 'package:wilan/models/category.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -171,7 +171,14 @@ class _FilterWidgetState extends State<FilterWidget> {
             title: 'All Category',
             thumbnail: '',
             numberOfCourses: 0,
-            numberOfSubCategories: 0, parentId: 0, slug: '', icon: '', sort: 0, createdAt: '', updatedAt: '', childs: []));
+            numberOfSubCategories: 0,
+            parentId: 0,
+            slug: '',
+            icon: '',
+            sort: 0,
+            createdAt: '',
+            updatedAt: '',
+            childs: []));
     //print(catData);
     final langData = Provider.of<Languages>(context, listen: false).items;
     langData.insert(
@@ -202,7 +209,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                 ),
               )
             : Center(
-                child: CircularProgressIndicator(color: kPrimaryColor.withOpacity(0.7)),
+                child: CircularProgressIndicator(
+                    color: kPrimaryColor.withOpacity(0.7)),
               )
         : Scaffold(
             backgroundColor: kBackgroundColor,
@@ -314,7 +322,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
-                                child: DropdownButton(dropdownColor: kBackgroundColor,
+                                child: DropdownButton(
+                                  dropdownColor: kBackgroundColor,
                                   value: _selectedSubCat,
                                   icon: const Card(
                                     elevation: 0.1,
@@ -365,7 +374,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
-                                child: DropdownButton(dropdownColor: kBackgroundColor,
+                                child: DropdownButton(
+                                  dropdownColor: kBackgroundColor,
                                   underline: const SizedBox(),
                                   icon: const Card(
                                     elevation: 0.1,
@@ -408,7 +418,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
-                                child: DropdownButton(dropdownColor: kBackgroundColor,
+                                child: DropdownButton(
+                                  dropdownColor: kBackgroundColor,
                                   underline: const SizedBox(),
                                   icon: const Card(
                                     elevation: 0.1,
@@ -452,7 +463,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
-                                child: DropdownButton(dropdownColor: kBackgroundColor,
+                                child: DropdownButton(
+                                  dropdownColor: kBackgroundColor,
                                   underline: const SizedBox(),
                                   icon: const Card(
                                     elevation: 0.1,
@@ -495,7 +507,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
-                                child: DropdownButton(dropdownColor: kBackgroundColor,
+                                child: DropdownButton(
+                                  dropdownColor: kBackgroundColor,
                                   underline: const SizedBox(),
                                   icon: const Card(
                                     elevation: 0.1,
@@ -579,7 +592,8 @@ class _FilterWidgetState extends State<FilterWidget> {
                                     textColor: Colors.white,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(7.0),
-                                      side: const BorderSide(color: kPrimaryColor),
+                                      side: const BorderSide(
+                                          color: kPrimaryColor),
                                     ),
                                     child: const Text(
                                       'Filter',

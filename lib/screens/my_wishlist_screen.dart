@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:academy_app/providers/courses.dart';
-import 'package:academy_app/widgets/wishlist_grid.dart';
+import 'package:wilan/providers/courses.dart';
+import 'package:wilan/widgets/wishlist_grid.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -84,7 +84,8 @@ class _MyWishlistScreenState extends State<MyWishlistScreen> {
             builder: (ctx, dataSnapshot) {
               if (dataSnapshot.connectionState == ConnectionState.waiting) {
                 return Center(
-                  child: CircularProgressIndicator(color: kPrimaryColor.withOpacity(0.7)),
+                  child: CircularProgressIndicator(
+                      color: kPrimaryColor.withOpacity(0.7)),
                 );
               } else {
                 if (dataSnapshot.error != null) {

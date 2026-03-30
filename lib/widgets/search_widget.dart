@@ -1,5 +1,5 @@
-import 'package:academy_app/constants.dart';
-import 'package:academy_app/screens/courses_screen.dart';
+import 'package:wilan/constants.dart';
+import 'package:wilan/screens/courses_screen.dart';
 import 'package:flutter/material.dart';
 
 class SearchWidget extends StatefulWidget {

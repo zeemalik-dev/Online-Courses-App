@@ -1,8 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:academy_app/models/common_functions.dart';
-import 'package:academy_app/providers/course_forum.dart';
-import 'package:academy_app/widgets/custom_text.dart';
+import 'package:wilan/models/common_functions.dart';
+import 'package:wilan/providers/course_forum.dart';
+import 'package:wilan/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -167,7 +167,8 @@ class _AskQuestionWidgetState extends State<AskQuestionWidget> {
                       width: double.infinity,
                       child: _isLoading
                           ? Center(
-                              child: CircularProgressIndicator(color: kPrimaryColor.withOpacity(0.7)),
+                              child: CircularProgressIndicator(
+                                  color: kPrimaryColor.withOpacity(0.7)),
                             )
                           : MaterialButton(
                               onPressed: _submit,

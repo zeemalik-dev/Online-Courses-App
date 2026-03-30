@@ -1,10 +1,10 @@
-import 'package:academy_app/widgets/app_bar_two.dart';
+import 'package:wilan/widgets/app_bar_two.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class VimeoIframe extends StatefulWidget {
   static const routeName = '/vimeo-iframe';
-  
+
   final String? url;
 
   const VimeoIframe({super.key, required this.url});
@@ -29,14 +29,12 @@ class _VimeoIframeState extends State<VimeoIframe> {
         Uri.dataFromString('''<iframe 
                 src="${widget.url}?loop=0&autoplay=0" 
                 width="100%" height="100%" frameborder="0" allow="fullscreen" 
-                allowfullscreen></iframe>''',
-            mimeType: 'text/html'),
+                allowfullscreen></iframe>''', mimeType: 'text/html'),
       );
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: const CustomAppBarTwo(),
       body: Stack(

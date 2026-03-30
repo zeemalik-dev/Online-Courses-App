@@ -1,4 +1,4 @@
-import 'package:academy_app/screens/sub_category_screen.dart';
+import 'package:wilan/screens/sub_category_screen.dart';
 import 'package:flutter/material.dart';
 import '../constants.dart';
 
@@ -96,8 +96,8 @@ class CategoryListItem extends StatelessWidget {
                   ),
                   color: iCardColor,
                   child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 2),
                     child: ImageIcon(
                       const AssetImage("assets/images/long_arrow_right.png"),
                       color: kPrimaryColor.withOpacity(0.7),

@@ -3,18 +3,18 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:academy_app/constants.dart';
-import 'package:academy_app/models/common_functions.dart';
-import 'package:academy_app/models/lesson.dart';
-import 'package:academy_app/providers/my_courses.dart';
-import 'package:academy_app/screens/file_data_screen.dart';
-import 'package:academy_app/screens/vimeo_iframe.dart';
-import 'package:academy_app/widgets/app_bar_two.dart';
-import 'package:academy_app/widgets/custom_text.dart';
-import 'package:academy_app/widgets/forum_tab_widget.dart';
-import 'package:academy_app/widgets/from_vimeo_player.dart';
-import 'package:academy_app/widgets/live_class_tab_widget.dart';
-import 'package:academy_app/widgets/new_youtube_player.dart';
+import 'package:wilan/constants.dart';
+import 'package:wilan/models/common_functions.dart';
+import 'package:wilan/models/lesson.dart';
+import 'package:wilan/providers/my_courses.dart';
+import 'package:wilan/screens/file_data_screen.dart';
+import 'package:wilan/screens/vimeo_iframe.dart';
+import 'package:wilan/widgets/app_bar_two.dart';
+import 'package:wilan/widgets/custom_text.dart';
+import 'package:wilan/widgets/forum_tab_widget.dart';
+import 'package:wilan/widgets/from_vimeo_player.dart';
+import 'package:wilan/widgets/live_class_tab_widget.dart';
+import 'package:wilan/widgets/new_youtube_player.dart';
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:http/http.dart' as http;
@@ -225,7 +225,7 @@ class _MyCourseDetailScreenState extends State<MyCourseDetailScreen>
 
     if (mounted) {
       setState(() {
-        path = "/data/user/0/com.example.academy_app/files/system";
+        path = "/data/user/0/com.example.wilan/files/system";
         fileName = lesson.title.toString();
         lessonId = lesson.id;
         courseId = myCourseId;

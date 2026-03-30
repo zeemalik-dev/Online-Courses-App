@@ -3,13 +3,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:academy_app/constants.dart';
-import 'package:academy_app/models/common_functions.dart';
-import 'package:academy_app/models/forum_questions_model.dart';
-import 'package:academy_app/providers/course_forum.dart';
-import 'package:academy_app/providers/shared_pref_helper.dart';
-import 'package:academy_app/widgets/app_bar_two.dart';
-import 'package:academy_app/widgets/custom_text.dart';
+import 'package:wilan/constants.dart';
+import 'package:wilan/models/common_functions.dart';
+import 'package:wilan/models/forum_questions_model.dart';
+import 'package:wilan/providers/course_forum.dart';
+import 'package:wilan/providers/shared_pref_helper.dart';
+import 'package:wilan/widgets/app_bar_two.dart';
+import 'package:wilan/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -175,7 +175,8 @@ class _ForumReplyScreenState extends State<ForumReplyScreen> {
       backgroundColor: kBackgroundColor,
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(color: kPrimaryColor.withOpacity(0.7)),
+              child: CircularProgressIndicator(
+                  color: kPrimaryColor.withOpacity(0.7)),
             )
           : SingleChildScrollView(
               child: Column(

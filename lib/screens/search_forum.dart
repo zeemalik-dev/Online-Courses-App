@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:academy_app/constants.dart';
-import 'package:academy_app/models/forum_questions_model.dart';
-import 'package:academy_app/providers/course_forum.dart';
-import 'package:academy_app/providers/shared_pref_helper.dart';
-import 'package:academy_app/widgets/app_bar_two.dart';
-import 'package:academy_app/widgets/ask_question_widget.dart';
-import 'package:academy_app/widgets/forum_question_grid.dart';
+import 'package:wilan/constants.dart';
+import 'package:wilan/models/forum_questions_model.dart';
+import 'package:wilan/providers/course_forum.dart';
+import 'package:wilan/providers/shared_pref_helper.dart';
+import 'package:wilan/widgets/app_bar_two.dart';
+import 'package:wilan/widgets/ask_question_widget.dart';
+import 'package:wilan/widgets/forum_question_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -111,7 +111,8 @@ class _SearchForumState extends State<SearchForum> {
       backgroundColor: kBackgroundColor,
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(color: kPrimaryColor.withOpacity(0.7)),
+              child: CircularProgressIndicator(
+                  color: kPrimaryColor.withOpacity(0.7)),
             )
           : SingleChildScrollView(
               child: Padding(

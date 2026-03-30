@@ -1,10 +1,10 @@
-import 'package:academy_app/widgets/app_bar_two.dart';
+import 'package:wilan/widgets/app_bar_two.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewScreenIframe extends StatefulWidget {
   static const routeName = '/webview-iframe';
-  
+
   final String? url;
 
   const WebViewScreenIframe({super.key, required this.url});
@@ -26,14 +26,14 @@ class _WebViewScreenIframeState extends State<WebViewScreenIframe> {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(
-        Uri.dataFromString('''<html><body><iframe style="height: 100%;width:100%" src="${widget.url}" allowfullscreen></iframe></body></html>''',
+        Uri.dataFromString(
+            '''<html><body><iframe style="height: 100%;width:100%" src="${widget.url}" allowfullscreen></iframe></body></html>''',
             mimeType: 'text/html'),
       );
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: const CustomAppBarTwo(),
       body: Stack(

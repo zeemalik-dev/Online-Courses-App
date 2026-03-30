@@ -1,10 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:academy_app/constants.dart';
-import 'package:academy_app/models/common_functions.dart';
-import 'package:academy_app/providers/auth.dart';
-import 'package:academy_app/screens/forgot_password_screen.dart';
-import 'package:academy_app/screens/signup_screen.dart';
-import 'package:academy_app/widgets/app_bar_two.dart';
+import 'package:wilan/constants.dart';
+import 'package:wilan/models/common_functions.dart';
+import 'package:wilan/providers/auth.dart';
+import 'package:wilan/screens/forgot_password_screen.dart';
+import 'package:wilan/screens/signup_screen.dart';
+import 'package:wilan/widgets/app_bar_two.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/user.dart';
@@ -92,10 +92,12 @@ class _AuthScreenStatePrivate extends State<AuthScreenPrivate> {
       _isLoading = true;
     });
 
-    await Provider.of<Auth>(context, listen: false).login(
+    await Provider.of<Auth>(context, listen: false)
+        .login(
       _authData['email'].toString(),
       _authData['password'].toString(),
-    ).then((_) {
+    )
+        .then((_) {
       setState(() {
         _isLoading = false;
         userDetails = Provider.of<Auth>(context, listen: false).user;
@@ -113,8 +115,8 @@ class _AuthScreenStatePrivate extends State<AuthScreenPrivate> {
     //       userDetails?.emailVerifiedAt?.capitalize(),
     //     );
     //   } else {
-        Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
-        CommonFunctions.showSuccessToast('Welcome, ${userDetails?.name}');
+    Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
+    CommonFunctions.showSuccessToast('Welcome, ${userDetails?.name}');
     //   }
     // } else {
     //   CommonFunctions.showErrorDialog(userDetails?.email?.capitalize()??'', context);

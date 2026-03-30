@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:academy_app/models/course_db_model.dart';
-import 'package:academy_app/models/section_db_model.dart';
-import 'package:academy_app/models/video_db_model.dart';
+import 'package:wilan/models/course_db_model.dart';
+import 'package:wilan/models/section_db_model.dart';
+import 'package:wilan/models/video_db_model.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -98,7 +98,8 @@ class DatabaseHelper {
   Future<dynamic> lessonDetails(id) async {
     dynamic result = [];
     if (_database != null) {
-      result = await _database!.rawQuery('SELECT * FROM video_list WHERE lesson_id="$id"');
+      result = await _database!
+          .rawQuery('SELECT * FROM video_list WHERE lesson_id="$id"');
       // Get first result
       var dbItem = result.first;
 

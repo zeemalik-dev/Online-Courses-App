@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:academy_app/models/lesson.dart';
-import 'package:academy_app/models/my_course.dart';
-import 'package:academy_app/models/section.dart';
+import 'package:wilan/models/lesson.dart';
+import 'package:wilan/models/my_course.dart';
+import 'package:wilan/models/section.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import '../constants.dart';
@@ -88,19 +88,17 @@ class MyCourses with ChangeNotifier {
 
       final List<Section> loadedSections = [];
       for (var sectionData in extractedData) {
-        loadedSections.add(
-          Section.fromJson(sectionData)
-        //   Section(
-        //   id: int.parse(sectionData['id']),
-        //   numberOfCompletedLessons: sectionData['completed_lesson_number'],
-        //   title: sectionData['title'],
-        //   totalDuration: sectionData['total_duration'],
-        //   lessonCounterEnds: sectionData['lesson_counter_ends'],
-        //   lessonCounterStarts: sectionData['lesson_counter_starts'],
-        //   mLesson: buildSectionLessons(sectionData['lessons'] as List<dynamic>),
-        // )
-        );
-      
+        loadedSections.add(Section.fromJson(sectionData)
+            //   Section(
+            //   id: int.parse(sectionData['id']),
+            //   numberOfCompletedLessons: sectionData['completed_lesson_number'],
+            //   title: sectionData['title'],
+            //   totalDuration: sectionData['total_duration'],
+            //   lessonCounterEnds: sectionData['lesson_counter_ends'],
+            //   lessonCounterStarts: sectionData['lesson_counter_starts'],
+            //   mLesson: buildSectionLessons(sectionData['lessons'] as List<dynamic>),
+            // )
+            );
       }
       _sectionItems = loadedSections;
       notifyListeners();

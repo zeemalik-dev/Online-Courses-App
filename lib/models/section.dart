@@ -22,8 +22,7 @@
 //   });
 // }
 
-
-import 'package:academy_app/models/lesson.dart';
+import 'package:wilan/models/lesson.dart';
 
 class Section {
   final int id;
@@ -99,4 +98,3 @@ class Section {
     };
   }
 }
-

@@ -1,6 +1,8 @@
-import 'package:academy_app/providers/courses.dart';
-import 'package:academy_app/widgets/app_bar_two.dart';
-import 'package:academy_app/widgets/course_list_item.dart';
+import 'package:wilan/providers/courses.dart';
+import 'package:wilan/widgets/app_bar_two.dart';
+import 'package:wilan/widgets/course_card_widget.dart';
+import 'package:wilan/widgets/course_grid.dart';
+import 'package:wilan/widgets/course_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -86,7 +88,8 @@ class _CoursesScreenState extends State<CoursesScreen> {
       backgroundColor: kBackgroundColor,
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(color: kPrimaryColor.withOpacity(0.7)),
+              child: CircularProgressIndicator(
+                  color: kPrimaryColor.withOpacity(0.7)),
             )
           : SingleChildScrollView(
               child: Column(
@@ -108,27 +111,35 @@ class _CoursesScreenState extends State<CoursesScreen> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (ctx, index) {
-                        return Center(
-                          child: CourseListItem(
-                            id: courseData[index].id.toInt(),
-                            title: courseData[index].title.toString(),
-                            thumbnail: courseData[index].thumbnail.toString(),
-                            rating: courseData[index].totalReviews.toInt(),
-                            price: courseData[index].price.toString(),
-                            instructor: courseData[index].instructorName.toString(),
-                            noOfRating:
-                                courseData[index].totalReviews.toInt(),
-                          ),
-                        );
-                      },
-                      itemCount: courseData.length,
-                    ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (ctx, index) {
+                      return Center(
+                          child: CourseGrid(
+                        id: courseData[index].id.toInt(),
+                        title: courseData[index].title.toString(),
+                        instructorName:
+                            courseData[index].instructorName.toString(),
+                        instructorImage:
+                            courseData[index].instructorImage.toString(),
+                        rating: courseData[index].totalReviews.toDouble(),
+                        price: courseData[index].price.toString(),
+                        courseType: courseData[index].courseType.toString(),
+                      )
+                          // CourseListItem(
+                          //   id: courseData[index].id.toInt(),
+                          //   title: courseData[index].title.toString(),
+                          //   thumbnail: courseData[index].thumbnail.toString(),
+                          //   rating: courseData[index].totalReviews.toInt(),
+                          //   price: courseData[index].price.toString(),
+                          //   instructor: courseData[index].instructorName.toString(),
+                          //   noOfRating:
+                          //       courseData[index].totalReviews.toInt(),
+                          // ),
+                          );
+                    },
+                    itemCount: courseData.length,
                   ),
                 ],
               ),

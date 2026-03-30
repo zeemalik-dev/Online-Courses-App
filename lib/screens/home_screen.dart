@@ -1,8 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'package:academy_app/models/course.dart';
-import 'package:academy_app/providers/bundles.dart';
+import 'package:wilan/models/course.dart';
+import 'package:wilan/providers/bundles.dart';
+import 'package:wilan/widgets/filter_widget.dart';
 import '../providers/categories.dart';
 import '../widgets/category_list_item.dart';
 import '../widgets/course_grid.dart';
@@ -27,6 +28,16 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Course> _topCourses = [];
   List<dynamic> _bundles = [];
   bool _categoriesLoaded = false;
+
+  void _showFilterModal(BuildContext ctx) {
+    showModalBottomSheet(
+      context: ctx,
+      isScrollControlled: true,
+      builder: (_) {
+        return const FilterWidget();
+      },
+    );
+  }
 
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
@@ -76,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadInitialData() async {
     // Prevent multiple loads
     if (_isLoading) return;
-    
+
     setState(() {
       _isLoading = true;
     });
@@ -85,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // Load top courses
       final coursesProvider = Provider.of<Courses>(context, listen: false);
       await coursesProvider.fetchCoursesBySearchQuery('');
-      
+
       if (mounted) {
         setState(() {
           _topCourses = coursesProvider.items;
@@ -116,18 +127,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> refreshList() async {
     if (_isLoading) return;
-    
+
     try {
       setState(() {
         _isLoading = true;
       });
-      
+
       final coursesProvider = Provider.of<Courses>(context, listen: false);
       await coursesProvider.fetchCoursesBySearchQuery('');
-      
+
       final bundlesProvider = Provider.of<Bundles>(context, listen: false);
       await bundlesProvider.fetchBundle(true);
-      
+
       if (mounted) {
         setState(() {
           _topCourses = coursesProvider.topItems;
@@ -199,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 20),
                   // Showing courses count
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
                         'Showing ${_topCourses.length} courses',
@@ -207,31 +218,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontSize: 14,
                           color: Colors.grey[600],
                           fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      // Filter & Sort button
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey[300]!),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.filter_list,
-                              size: 18,
-                              color: Colors.grey[700],
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              'Filter & Sort',
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.grey[700],
-                              ),
-                            ),
-                          ],
                         ),
                       ),
                     ],
@@ -248,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: CircularProgressIndicator(),
                 ),
               ),
-            
+
             // Top Courses Section - Vertical List
             if (_topCourses.isNotEmpty)
               Padding(
@@ -257,7 +243,48 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 16),
+                    // Filter & Sort button
+                    Center(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width *
+                            0.8, // 80% width
+                        height: 50, // minimum height
+                        child: ElevatedButton(
+                          onPressed: () => _showFilterModal(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            elevation: 4, // shadow
+                            shadowColor: Colors.black26,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  14), // rounded rectangle
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.filter_list,
+                                size: 18,
+                                color: Colors.black,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                "FILTER & SORT",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                     // Section header with accent line
+
+                    const SizedBox(height: 16),
                     Row(
                       children: [
                         Container(
@@ -280,7 +307,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Vertical list of courses
                     ListView.builder(
                       shrinkWrap: true,
@@ -328,11 +355,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  
                   FutureBuilder(
-                    future: Provider.of<Categories>(context, listen: false).fetchCategories(),
+                    future: Provider.of<Categories>(context, listen: false)
+                        .fetchCategories(),
                     builder: (ctx, dataSnapshot) {
-                      if (dataSnapshot.connectionState == ConnectionState.waiting) {
+                      if (dataSnapshot.connectionState ==
+                          ConnectionState.waiting) {
                         return const Center(
                           child: Padding(
                             padding: EdgeInsets.all(32.0),
@@ -343,7 +371,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         return Center(
                           child: Column(
                             children: [
-                              const Icon(Icons.error_outline, size: 48, color: Colors.grey),
+                              const Icon(Icons.error_outline,
+                                  size: 48, color: Colors.grey),
                               const SizedBox(height: 8),
                               Text(
                                 'Error loading categories',
@@ -380,7 +409,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     id: category.id,
                                     title: category.title,
                                     thumbnail: category.thumbnail,
-                                    numberOfSubCategories: category.numberOfSubCategories,
+                                    numberOfSubCategories:
+                                        category.numberOfSubCategories,
                                   ),
                                 );
                               },
@@ -394,7 +424,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 32),
           ],
         ),
@@ -412,7 +442,7 @@ class _HomeScreenState extends State<HomeScreen> {
         instructorName: course.instructorName,
         instructorImage: course.instructorImage,
         rating: course.averageRating,
-        price: course.price,
+        price: course.getFormattedPrice(),
       ),
     );
   }

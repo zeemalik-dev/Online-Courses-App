@@ -3,10 +3,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'package:academy_app/models/forum_questions_model.dart';
-import 'package:academy_app/providers/course_forum.dart';
-import 'package:academy_app/providers/shared_pref_helper.dart';
-import 'package:academy_app/screens/search_forum.dart';
+import 'package:wilan/models/forum_questions_model.dart';
+import 'package:wilan/providers/course_forum.dart';
+import 'package:wilan/providers/shared_pref_helper.dart';
+import 'package:wilan/screens/search_forum.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
@@ -214,7 +214,8 @@ class _ForumTabWidgetState extends State<ForumTabWidget> {
         },
         child: _isLoading
             ? Center(
-                child: CircularProgressIndicator(color: kPrimaryColor.withOpacity(0.7)),
+                child: CircularProgressIndicator(
+                    color: kPrimaryColor.withOpacity(0.7)),
               )
             : SingleChildScrollView(
                 controller: _xcrollController,
@@ -328,13 +329,17 @@ class _ForumTabWidgetState extends State<ForumTabWidget> {
                               //After popped back from report page call refresh indicator to refresh page
                               refreshKey.currentState!.show();
                             },
-                            child: const Text('Ask a new question',style: TextStyle(color: kPrimaryColor),),
+                            child: const Text(
+                              'Ask a new question',
+                              style: TextStyle(color: kPrimaryColor),
+                            ),
                           ),
                         ],
                       ),
                       const Divider(
                         height: sqrt1_2,
-                        color: Color.fromARGB(255, 223, 223, 223),),
+                        color: Color.fromARGB(255, 223, 223, 223),
+                      ),
                       ListView.builder(
                         controller: _scrollController,
                         itemCount: activeQuestions.length,

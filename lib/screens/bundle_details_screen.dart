@@ -1,13 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:academy_app/models/bundle_details_model.dart';
-import 'package:academy_app/models/common_functions.dart';
-import 'package:academy_app/providers/bundles.dart';
-import 'package:academy_app/providers/shared_pref_helper.dart';
-import 'package:academy_app/widgets/app_bar_two.dart';
-import 'package:academy_app/widgets/course_grid.dart';
-import 'package:academy_app/widgets/custom_text.dart';
-import 'package:academy_app/widgets/star_display_widget.dart';
+import 'package:wilan/models/bundle_details_model.dart';
+import 'package:wilan/models/common_functions.dart';
+import 'package:wilan/providers/bundles.dart';
+import 'package:wilan/providers/shared_pref_helper.dart';
+import 'package:wilan/widgets/app_bar_two.dart';
+import 'package:wilan/widgets/course_grid.dart';
+import 'package:wilan/widgets/custom_text.dart';
+import 'package:wilan/widgets/star_display_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -74,7 +74,8 @@ class _BundleDetailsScreenState extends State<BundleDetailsScreen> {
       backgroundColor: kBackgroundColor,
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(color: kPrimaryColor.withOpacity(0.7)),
+              child: CircularProgressIndicator(
+                  color: kPrimaryColor.withOpacity(0.7)),
             )
           : SingleChildScrollView(
               child: Column(
@@ -245,7 +246,8 @@ class _BundleDetailsScreenState extends State<BundleDetailsScreen> {
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (ctx, index) {
                         return CourseGrid(
-                          courseType: bundles[0].bundleCourses![index].courseType,
+                          courseType:
+                              bundles[0].bundleCourses![index].courseType,
                           id: int.parse(bundles[0].bundleCourses![index].id!),
                           title: bundles[0].bundleCourses![index].title,
                           thumbnail: bundles[0].bundleCourses![index].thumbnail,
@@ -254,7 +256,10 @@ class _BundleDetailsScreenState extends State<BundleDetailsScreen> {
                           instructorImage:
                               bundles[0].bundleCourses![index].instructorImage,
                           price: bundles[0].bundleCourses![index].price,
-                          rating: bundles[0].bundleCourses![index].rating?.toDouble(),
+                          rating: bundles[0]
+                              .bundleCourses![index]
+                              .rating
+                              ?.toDouble(),
                         );
                       },
                       itemCount: bundles[0].bundleCourses!.length,

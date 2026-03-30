@@ -3,10 +3,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:academy_app/providers/auth.dart';
-import 'package:academy_app/screens/account_remove_screen.dart';
-import 'package:academy_app/widgets/account_list_tile.dart';
-import 'package:academy_app/widgets/custom_text.dart';
+import 'package:wilan/providers/auth.dart';
+import 'package:wilan/screens/account_remove_screen.dart';
+import 'package:wilan/widgets/account_list_tile.dart';
+import 'package:wilan/widgets/custom_text.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -142,8 +142,8 @@ class _AccountScreenState extends State<AccountScreen> {
           } else {
             if (dataSnapshot.error != null) {
               //error
-              return 
-              // _connectionStatus == ConnectivityResult.none
+              return
+                  // _connectionStatus == ConnectivityResult.none
                   // ? Center(
                   //     child: Column(
                   //       children: [
@@ -166,7 +166,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   //           padding: const EdgeInsets.all(8.0),
                   //           child: ElevatedButton.icon(
                   //             onPressed: () {
-                                
+
                   //               Navigator.push(context,
                   //                   MaterialPageRoute(builder: (context) {
                   //                 return const DownloadedCourseList();
@@ -185,23 +185,22 @@ class _AccountScreenState extends State<AccountScreen> {
                   //       ],
                   //     ),
                   //   )
-                  // : 
+                  // :
                   Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.logout),
-                          onPressed: () {
-                            Provider.of<Auth>(context, listen: false)
-                                .logout()
-                                .then((_) => Navigator.pushNamedAndRemoveUntil(
-                                    context, '/home', (r) => false));
-                          },
-                        ),
-                        const Center(
-                          child: Text('Error Occurred'),
-                        ),
-                      ],
-                    );
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.logout),
+                    onPressed: () {
+                      Provider.of<Auth>(context, listen: false).logout().then(
+                          (_) => Navigator.pushNamedAndRemoveUntil(
+                              context, '/home', (r) => false));
+                    },
+                  ),
+                  const Center(
+                    child: Text('Error Occurred'),
+                  ),
+                ],
+              );
             } else {
               return Consumer<Auth>(builder: (context, authData, child) {
                 final user = authData.user;

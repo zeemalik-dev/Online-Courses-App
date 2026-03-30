@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:academy_app/models/course_db_model.dart';
-import 'package:academy_app/models/video_db_model.dart';
-import 'package:academy_app/providers/database_helper.dart';
-import 'package:academy_app/screens/download_list_screen.dart';
-import 'package:academy_app/widgets/custom_text.dart';
+import 'package:wilan/models/course_db_model.dart';
+import 'package:wilan/models/video_db_model.dart';
+import 'package:wilan/providers/database_helper.dart';
+import 'package:wilan/screens/download_list_screen.dart';
+import 'package:wilan/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../constants.dart';
@@ -23,7 +23,6 @@ class _DownloadedCourseListState extends State<DownloadedCourseList> {
 
   List<VideoModel> listVideos = [];
   List<int> courseArr = [];
-
 
   Future<List<Map<String, dynamic>>?> getVideos() async {
     List<Map<String, dynamic>> listMap =
@@ -46,7 +45,7 @@ class _DownloadedCourseListState extends State<DownloadedCourseList> {
   // Future<List<Map<String, dynamic>>?> getCourse() async {
   //   List<Map<String, dynamic>> listMap =
   //       await DatabaseHelper.instance.queryAllRows('course_list');
-    
+
   //   for (var map in listMap) {
   //     if(!courseArr.contains(map['course_id'])){
   //       await DatabaseHelper.instance.removeCourse(map['course_id']);
@@ -69,7 +68,7 @@ class _DownloadedCourseListState extends State<DownloadedCourseList> {
     for (int i = 0; i < listVideos.length; i++) {
       VideoModel getVideo = listVideos[i];
       File checkPath = File("${getVideo.path}/${getVideo.title}");
-      if(checkPath.existsSync()) {
+      if (checkPath.existsSync()) {
         if (getVideo.courseId == courseId) {
           count = count + 1;
         }
@@ -218,7 +217,7 @@ class _DownloadedCourseListState extends State<DownloadedCourseList> {
                         ),
                       ),
                     );
-                  }, 
+                  },
                   mainAxisSpacing: 5.0,
                   crossAxisSpacing: 5.0,
                 );

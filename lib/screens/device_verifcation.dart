@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:academy_app/models/common_functions.dart';
+import 'package:wilan/models/common_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -15,7 +15,8 @@ class DeviceVerificationScreen extends StatefulWidget {
 
   @override
   // ignore: library_private_types_in_public_api
-  _DeviceVerificationScreenState createState() => _DeviceVerificationScreenState();
+  _DeviceVerificationScreenState createState() =>
+      _DeviceVerificationScreenState();
 }
 
 Future<UpdateVerifyModel> verifyEmail(
@@ -42,11 +43,8 @@ Future<UpdateVerifyModel> verifyEmail(
 Future<UpdateVerifyModel> resendCode(String email, String token) async {
   const String apiUrl = "$BASE_URL/api/new_login_confirmation/resend";
 
-  final response = await http.post(Uri.parse(apiUrl), 
-    body: {
-      'auth_token': token
-    }
-  );
+  final response =
+      await http.post(Uri.parse(apiUrl), body: {'auth_token': token});
 
   // print(response.body);
 
@@ -119,9 +117,8 @@ class _DeviceVerificationScreenState extends State<DeviceVerificationScreen> {
       _isLoading = true;
     });
     try {
-
-      final Map<String, dynamic> arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-
+      final Map<String, dynamic> arguments =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
       final email = arguments['email'];
       final token = arguments['token'];
@@ -149,15 +146,16 @@ class _DeviceVerificationScreenState extends State<DeviceVerificationScreen> {
       _isResendLoading = true;
     });
     try {
-      final Map<String, dynamic> arguments = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-
+      final Map<String, dynamic> arguments =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
       final email = arguments['email'];
       final token = arguments['token'];
       final UpdateVerifyModel user = await resendCode(email, token);
 
       if (user.validity == 1) {
-        Navigator.of(context).pushNamed(DeviceVerificationScreen.routeName, arguments: {
+        Navigator.of(context)
+            .pushNamed(DeviceVerificationScreen.routeName, arguments: {
           'email': email,
           'token': token,
         });
@@ -383,15 +381,15 @@ class _DeviceVerificationScreenState extends State<DeviceVerificationScreen> {
                           style: TextStyle(color: kSecondaryColor),
                         ),
                         _isResendLoading
-                        ? const Center(child: CircularProgressIndicator()) 
-                        : TextButton(
-                          onPressed: _resend,
-                          child: const Text(
-                            'Resend',
-                            style: TextStyle(color: kBlueColor),
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
+                            ? const Center(child: CircularProgressIndicator())
+                            : TextButton(
+                                onPressed: _resend,
+                                child: const Text(
+                                  'Resend',
+                                  style: TextStyle(color: kBlueColor),
+                                  textAlign: TextAlign.start,
+                                ),
+                              ),
                         SizedBox(
                           width: double.infinity,
                           child: _isLoading

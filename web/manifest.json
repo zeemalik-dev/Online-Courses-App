@@ -1,6 +1,6 @@
 {
-    "name": "academy_app",
-    "short_name": "academy_app",
+    "name": "wilan",
+    "short_name": "wilan",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

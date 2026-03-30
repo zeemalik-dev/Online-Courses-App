@@ -1,5 +1,5 @@
-import 'package:academy_app/constants.dart';
-import 'package:academy_app/widgets/app_bar_two.dart';
+import 'package:wilan/constants.dart';
+import 'package:wilan/widgets/app_bar_two.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_html/html.dart' as html;
 

@@ -1,14 +1,14 @@
 import 'dart:io';
-import 'package:academy_app/providers/bundles.dart';
-import 'package:academy_app/providers/course_forum.dart';
-import 'package:academy_app/screens/account_remove_screen.dart';
-import 'package:academy_app/screens/auth_screen_private.dart';
-import 'package:academy_app/screens/check_out_screen.dart';
-import 'package:academy_app/screens/downloaded_course_list.dart';
-import 'package:academy_app/screens/edit_password_screen.dart';
-import 'package:academy_app/screens/edit_profile_screen.dart';
-import 'package:academy_app/screens/sub_category_screen.dart';
-import 'package:academy_app/screens/verification_screen.dart';
+import 'package:wilan/providers/bundles.dart';
+import 'package:wilan/providers/course_forum.dart';
+import 'package:wilan/screens/account_remove_screen.dart';
+import 'package:wilan/screens/auth_screen_private.dart';
+import 'package:wilan/screens/check_out_screen.dart';
+import 'package:wilan/screens/downloaded_course_list.dart';
+import 'package:wilan/screens/edit_password_screen.dart';
+import 'package:wilan/screens/edit_profile_screen.dart';
+import 'package:wilan/screens/sub_category_screen.dart';
+import 'package:wilan/screens/verification_screen.dart';
 import 'package:logging/logging.dart';
 import 'providers/auth.dart';
 import 'providers/courses.dart';
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
-  
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -86,9 +86,9 @@ class MyApp extends StatelessWidget {
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
           // title: 'Cloud Computing Courses and Cyber Security Courses',
-          title: 'Academy App',
+          title: 'Wilan',
           theme: ThemeData(
-            fontFamily: 'google_sans',
+            // // fontFamily: 'google_sans',,
             colorScheme: const ColorScheme.light(primary: kDarkButtonBg),
             // colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.deepPurple)
             //     .copyWith(secondary: kDarkButtonBg),
@@ -114,8 +114,12 @@ class MyApp extends StatelessWidget {
             BundleDetailsScreen.routeName: (ctx) => const BundleDetailsScreen(),
             MyBundleCoursesListScreen.routeName: (ctx) =>
                 const MyBundleCoursesListScreen(),
-            DeviceVerificationScreen.routeName: (context) => const DeviceVerificationScreen(),
-            CheckoutSessionScreen.routeName: (ctx) => const CheckoutSessionScreen(course: null), // Placeholder, will be navigated with arguments
+            DeviceVerificationScreen.routeName: (context) =>
+                const DeviceVerificationScreen(),
+            CheckoutSessionScreen.routeName: (ctx) =>
+                const CheckoutSessionScreen(
+                    course:
+                        null), // Placeholder, will be navigated with arguments
           },
         ),
       ),

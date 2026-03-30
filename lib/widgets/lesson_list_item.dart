@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 import '../models/lesson.dart';
 import 'from_network.dart';
-import 'package:academy_app/screens/vimeo_iframe.dart';
+import 'package:wilan/screens/vimeo_iframe.dart';
 import 'from_youtube.dart';
 
 class LessonListItem extends StatefulWidget {
@@ -41,12 +41,8 @@ class _LessonListItemState extends State<LessonListItem> {
         //           vimeoVideoId: vimeoVideoId),
         //     ));
         String vimUrl = 'https://player.vimeo.com/video/$vimeoVideoId';
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    VimeoIframe(url: vimUrl)));
-                    
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => VimeoIframe(url: vimUrl)));
       } else {
         Navigator.push(
             context,
@@ -118,7 +114,6 @@ class _LessonListItemState extends State<LessonListItem> {
             ],
           ),
         ),
-        
       ],
     );
   }

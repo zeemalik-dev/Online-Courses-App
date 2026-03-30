@@ -2,10 +2,10 @@
 
 import 'dart:async';
 import 'dart:convert';
-import 'package:academy_app/providers/my_bundles.dart';
-import 'package:academy_app/providers/my_courses.dart';
-import 'package:academy_app/widgets/my_bundle_grid.dart';
-import 'package:academy_app/widgets/my_course_grid.dart';
+import 'package:wilan/providers/my_bundles.dart';
+import 'package:wilan/providers/my_courses.dart';
+import 'package:wilan/widgets/my_bundle_grid.dart';
+import 'package:wilan/widgets/my_course_grid.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -105,7 +105,8 @@ class _MyCoursesScreenState extends State<MyCoursesScreen>
       backgroundColor: kBackgroundColor,
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(color: kPrimaryColor.withOpacity(0.7)),
+              child: CircularProgressIndicator(
+                  color: kPrimaryColor.withOpacity(0.7)),
             )
           : bundleStatus == true
               ? NestedScrollView(
@@ -129,7 +130,6 @@ class _MyCoursesScreenState extends State<MyCoursesScreen>
                             labelColor: Colors.white,
                             tabs: const [
                               Tab(
-                                
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -212,7 +212,8 @@ class _MyCoursesScreenState extends State<MyCoursesScreen>
           return SizedBox(
             height: MediaQuery.of(context).size.height * .7,
             child: Center(
-              child: CircularProgressIndicator(color: kPrimaryColor.withOpacity(0.7)),
+              child: CircularProgressIndicator(
+                  color: kPrimaryColor.withOpacity(0.7)),
             ),
           );
         } else {
@@ -245,8 +246,7 @@ class _MyCoursesScreenState extends State<MyCoursesScreen>
                   );
           } else {
             return Consumer<MyCourses>(
-              builder: (context, myCourseData, child) =>
-                  AlignedGridView.count(
+              builder: (context, myCourseData, child) => AlignedGridView.count(
                 padding: const EdgeInsets.all(10.0),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -275,7 +275,8 @@ class _MyCoursesScreenState extends State<MyCoursesScreen>
         builder: (ctx, dataSnapshot) {
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(color: kPrimaryColor.withOpacity(0.7)),
+              child: CircularProgressIndicator(
+                  color: kPrimaryColor.withOpacity(0.7)),
             );
           } else {
             if (dataSnapshot.error != null) {

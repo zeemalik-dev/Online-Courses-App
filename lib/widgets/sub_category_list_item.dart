@@ -1,4 +1,4 @@
-import 'package:academy_app/screens/courses_screen.dart';
+import 'package:wilan/screens/courses_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape.dart';
 import '../constants.dart';
@@ -43,7 +43,7 @@ class SubCategoryListItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 15.0, bottom: 15),
               child: Text(
-                "${index!+1}.",
+                "${index! + 1}.",
               ),
             ),
             Expanded(
@@ -91,8 +91,8 @@ class SubCategoryListItem extends StatelessWidget {
                   ),
                   color: iCardColor,
                   child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 2),
                     child: ImageIcon(
                       const AssetImage("assets/images/long_arrow_right.png"),
                       color: kPrimaryColor.withOpacity(0.7),

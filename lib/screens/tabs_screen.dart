@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:academy_app/constants.dart';
-import 'package:academy_app/widgets/app_bar.dart';
-import 'package:academy_app/widgets/filter_widget.dart';
+import 'package:wilan/constants.dart';
+import 'package:wilan/widgets/app_bar.dart';
+import 'package:wilan/widgets/filter_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'account_screen.dart';
@@ -85,27 +85,19 @@ class _TabsScreenState extends State<TabsScreen> {
     });
   }
 
-  void _showFilterModal(BuildContext ctx) {
-    showModalBottomSheet(
-      context: ctx,
-      isScrollControlled: true,
-      builder: (_) {
-        return const FilterWidget();
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       appBar: const CustomAppBar(),
       body: _pages[_selectedPageIndex],
-      floatingActionButton: _selectedPageIndex != 3 ? FloatingActionButton(
-        onPressed: () => _showFilterModal(context),
-        backgroundColor: kDarkButtonBg,
-        child: const Icon(Icons.filter_list),
-      ) : null,
+      // floatingActionButton: _selectedPageIndex != 3
+      //     ? FloatingActionButton(
+      //         onPressed: () => _showFilterModal(context),
+      //         backgroundColor: kDarkButtonBg,
+      //         child: const Icon(Icons.filter_list),
+      //       )
+      //     : null,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         items: const [

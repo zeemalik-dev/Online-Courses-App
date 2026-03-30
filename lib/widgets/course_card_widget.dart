@@ -1,5 +1,5 @@
-import 'package:academy_app/models/course.dart';
-import 'package:academy_app/models/section.dart';
+import 'package:wilan/models/course.dart';
+import 'package:wilan/models/section.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../constants.dart';
@@ -25,7 +25,7 @@ class CourseCardWidget extends StatelessWidget {
     } else if (value is double) {
       amount = value;
     }
-    
+
     final formatter = NumberFormat.currency(
       locale: 'en_NG',
       symbol: '₦',
@@ -36,12 +36,15 @@ class CourseCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool hasDiscount = (course.discountFlag == 1 && 
-                         course.discountedPrice != null && 
-                         course.discountedPrice != (int.tryParse(course.price.replaceAll('₦', '')) ?? 0));
+    final bool hasDiscount = (course.discountFlag == 1 &&
+        course.discountedPrice != null &&
+        course.discountedPrice !=
+            (int.tryParse(course.price.replaceAll('₦', '')) ?? 0));
     final regularPrice = course.price;
-    final discountedPrice = hasDiscount ? course.discountedPrice : int.tryParse(course.price.replaceAll('₦', '')) ?? 0;
-    
+    final discountedPrice = hasDiscount
+        ? course.discountedPrice
+        : int.tryParse(course.price.replaceAll('₦', '')) ?? 0;
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -86,7 +89,7 @@ class CourseCardWidget extends StatelessWidget {
                   },
                 ),
               ),
-              
+
               // Category Badge
               Positioned(
                 top: 16,
@@ -110,7 +113,7 @@ class CourseCardWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              
+
               // Wishlist Button
               Positioned(
                 top: 12,
@@ -124,12 +127,10 @@ class CourseCardWidget extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      course.isWishlisted 
-                          ? Icons.favorite 
+                      course.isWishlisted
+                          ? Icons.favorite
                           : Icons.favorite_border,
-                      color: course.isWishlisted 
-                          ? Colors.red 
-                          : kSecondaryColor,
+                      color: course.isWishlisted ? Colors.red : kSecondaryColor,
                       size: 20,
                     ),
                   ),
@@ -156,9 +157,9 @@ class CourseCardWidget extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                
+
                 const SizedBox(height: 12),
-                
+
                 // Instructor Info
                 Row(
                   children: [
@@ -186,9 +187,9 @@ class CourseCardWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 // Rating and Duration Row
                 Row(
                   children: [
@@ -219,9 +220,9 @@ class CourseCardWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                    
+
                     const SizedBox(width: 16),
-                    
+
                     // Duration
                     Row(
                       children: [
@@ -242,11 +243,9 @@ class CourseCardWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 16),
-                
-                
-                
+
                 // Price Section
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,6 +257,7 @@ class CourseCardWidget extends StatelessWidget {
                           fontSize: 16,
                           color: kDiscountedPriceColor,
                           decoration: TextDecoration.lineThrough,
+                          // fontFamily: 'google_sans',
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -268,86 +268,83 @@ class CourseCardWidget extends StatelessWidget {
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
+                        // fontFamily: 'google_sans',
                       ),
                     ),
                     // Divider
-                      const SizedBox(height: 12),
-                
-                // Delivery Method Badge
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: kPrimaryColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.school,
-                        size: 14,
-                        color: kPrimaryColor,
+                    const SizedBox(height: 12),
+
+                    // Delivery Method Badge
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
                       ),
-                      const SizedBox(width: 4),
-                      Text(
-                        _getDeliveryMethod(course.deliveryMethod),
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w500,
-                          color: kPrimaryColor,
-                        ),
+                      decoration: BoxDecoration(
+                        color: kPrimaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                    ],
-                  ),
-                ),
-             
-                  
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.school,
+                            size: 14,
+                            color: kPrimaryColor,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            _getDeliveryMethod(course.deliveryMethod),
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w500,
+                              color: kPrimaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-                 
+
                 Divider(
                   height: 1,
                   color: Colors.grey.withOpacity(0.2),
                 ),
-                
+
                 const SizedBox(height: 16),
-                    
-                    // Enroll Button
-                    SizedBox(
-                      width: MediaQuery.of( context).size.width * 0.8 ,
-                      child: ElevatedButton(
-                        onPressed: onEnrollTap,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: course.isPurchased 
-                              ? kGreenPurchaseColor 
-                              : kPrimaryColor,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: Text(
-                          course.isPurchased
-                              ? 'Purchased'
-                              : course.isPaid == 0
-                                  ? 'Enroll'
-                                  : 'Enroll Now',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
+
+                // Enroll Button
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: ElevatedButton(
+                    onPressed: onEnrollTap,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: course.isPurchased
+                          ? kGreenPurchaseColor
+                          : kPrimaryColor,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                  
-              
+                    child: Text(
+                      course.isPurchased
+                          ? 'Purchased'
+                          : course.isPaid == 0
+                              ? 'Enroll'
+                              : 'Enroll Now',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -355,7 +352,7 @@ class CourseCardWidget extends StatelessWidget {
       ),
     );
   }
-  
+
   String _getCategoryLevel(String? level) {
     switch (level?.toLowerCase()) {
       case 'beginner':
@@ -368,7 +365,7 @@ class CourseCardWidget extends StatelessWidget {
         return 'COURSE';
     }
   }
-  
+
   String _getCourseDuration(List<Section>? sections) {
     if (sections == null || sections.isEmpty) {
       // Check if it's the LEAD FROM THE START course
@@ -377,20 +374,20 @@ class CourseCardWidget extends StatelessWidget {
       }
       return '6 Weeks';
     }
-    
+
     // Calculate total lessons
     int totalLessons = 0;
     for (var section in sections) {
       totalLessons += section.lessons.length;
     }
-    
+
     if (totalLessons > 0) {
       return '$totalLessons Lessons';
     }
-    
+
     return '6 Weeks';
   }
-  
+
   String _getDeliveryMethod(String? method) {
     switch (method?.toLowerCase()) {
       case 'online':

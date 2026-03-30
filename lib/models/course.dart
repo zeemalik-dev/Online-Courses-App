@@ -1,4 +1,5 @@
-import 'package:academy_app/models/section.dart';
+import 'package:wilan/models/section.dart';
+import 'package:intl/intl.dart';
 
 class Course {
   final int id;
@@ -130,9 +131,8 @@ class Course {
     // 🔹 Parse sections
     List<Section> sections = [];
     if (json['sections'] != null && json['sections'] is List) {
-      sections = (json['sections'] as List)
-          .map((e) => Section.fromJson(e))
-          .toList();
+      sections =
+          (json['sections'] as List).map((e) => Section.fromJson(e)).toList();
     }
 
     // 🔹 Parse includes
@@ -258,11 +258,19 @@ class Course {
         0;
   }
 
-  String formatCurrency(double value) {
-    return "₦${value.toStringAsFixed(0).replaceAllMapped(
-      RegExp(r'\B(?=(\d{3})+(?!\d))'),
-      (match) => ',',
-    )}";
+  String formatPrice(String? price) {
+    if (price == null || price.isEmpty) return 'Free';
+
+    final value = double.tryParse(price);
+    if (value == null) return 'Free';
+
+    final formatter = NumberFormat.currency(
+      locale: 'en_NG', // Nigeria format
+      symbol: '₦',
+      decimalDigits: 0, // remove decimals (optional)
+    );
+
+    return formatter.format(value);
   }
 
   double get finalPrice {
@@ -280,12 +288,12 @@ class Course {
   }
 
   String getFormattedPrice() {
-    return isPaid == 1 ? formatCurrency(finalPrice) : 'Free';
+    return isPaid == 1 ? formatPrice(finalPrice.toString()) : 'Free';
   }
 
   String getOriginalPrice() {
     if (isPaid == 1 && discountFlag == 1) {
-      return formatCurrency(_parsePrice(price).toDouble());
+      return formatPrice(_parsePrice(price).toString());
     }
     return '';
   }

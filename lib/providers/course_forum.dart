@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:academy_app/models/forum_questions_model.dart';
+import 'package:wilan/models/forum_questions_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import '../constants.dart';

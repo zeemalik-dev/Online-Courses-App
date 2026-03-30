@@ -4,13 +4,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:academy_app/models/common_functions.dart';
-import 'package:academy_app/models/lesson.dart';
-import 'package:academy_app/providers/database_helper.dart';
-import 'package:academy_app/providers/my_bundles.dart';
-import 'package:academy_app/widgets/app_bar_two.dart';
-import 'package:academy_app/widgets/custom_text.dart';
-import 'package:academy_app/widgets/new_youtube_player.dart';
+import 'package:wilan/models/common_functions.dart';
+import 'package:wilan/models/lesson.dart';
+import 'package:wilan/providers/database_helper.dart';
+import 'package:wilan/providers/my_bundles.dart';
+import 'package:wilan/widgets/app_bar_two.dart';
+import 'package:wilan/widgets/custom_text.dart';
+import 'package:wilan/widgets/new_youtube_player.dart';
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:http/http.dart' as http;
@@ -230,7 +230,7 @@ class _McbdThreeState extends State<McbdThree>
     // await FileDownloader().enqueue(backgroundDownloadTask!);
     if (mounted) {
       setState(() {
-        path = "/data/user/0/com.example.academy_app/files/system";
+        path = "/data/user/0/com.example.wilan/files/system";
         fileName = lesson.title.toString();
         lessonId = lesson.id;
         courseId = myCourseId;

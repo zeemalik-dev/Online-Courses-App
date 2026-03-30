@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
@@ -22,7 +24,8 @@ class CourseGrid extends StatelessWidget {
     required this.instructorImage,
     required this.rating,
     required this.price,
-    this.thumbnail, required this.courseType,
+    this.thumbnail,
+    required this.courseType,
   });
 
   @override
@@ -32,7 +35,7 @@ class CourseGrid extends StatelessWidget {
     final isSmallScreen = screenWidth < 600;
     final cardWidth = isSmallScreen ? 280.0 : 320.0;
     final thumbnailHeight = isSmallScreen ? 140.0 : 160.0;
-
+    log('Building CourseGrid for course ID: $id, Title: $title , Price: $price');
     return InkWell(
       onTap: () {
         Navigator.of(context)
@@ -148,16 +151,16 @@ class CourseGrid extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child:  Text(
-                          courseType != null && courseType!.isNotEmpty ? courseType! : 'General'  ,
+                        child: Text(
+                          courseType != null && courseType!.isNotEmpty
+                              ? courseType!
+                              : 'General',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                             letterSpacing: 0.8,
-                            
                           ),
-                          
                         ),
                       ),
                     ),
@@ -220,7 +223,8 @@ class CourseGrid extends StatelessWidget {
                                       width: 28,
                                       height: 28,
                                       fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) {
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
                                         return Icon(
                                           Icons.person_outline,
                                           size: 16,
@@ -316,12 +320,13 @@ class CourseGrid extends StatelessWidget {
                             ),
                             child: Text(
                               price != null && price!.isNotEmpty
-                                  ? '\$${price}'
+                                  ? '${price}'
                                   : 'Free',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: kPrimaryColor,
+                                // fontFamily: 'google_sans',
                               ),
                             ),
                           ),

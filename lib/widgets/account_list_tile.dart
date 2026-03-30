@@ -1,7 +1,7 @@
-import 'package:academy_app/providers/auth.dart';
-import 'package:academy_app/screens/downloaded_course_list.dart';
-import 'package:academy_app/screens/edit_password_screen.dart';
-import 'package:academy_app/screens/edit_profile_screen.dart';
+import 'package:wilan/providers/auth.dart';
+import 'package:wilan/screens/downloaded_course_list.dart';
+import 'package:wilan/screens/edit_password_screen.dart';
+import 'package:wilan/screens/edit_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../constants.dart';
@@ -76,7 +76,8 @@ class AccountListTile extends StatelessWidget {
             ),
             color: iCardColor,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2),
               child: ImageIcon(
                 const AssetImage("assets/images/long_arrow_right.png"),
                 color: kPrimaryColor.withOpacity(0.7),

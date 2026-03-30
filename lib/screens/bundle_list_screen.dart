@@ -1,7 +1,7 @@
-import 'package:academy_app/constants.dart';
-import 'package:academy_app/providers/bundles.dart';
-import 'package:academy_app/widgets/app_bar_two.dart';
-import 'package:academy_app/widgets/bundle_list_item.dart';
+import 'package:wilan/constants.dart';
+import 'package:wilan/providers/bundles.dart';
+import 'package:wilan/widgets/app_bar_two.dart';
+import 'package:wilan/widgets/bundle_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,7 +53,8 @@ class _BundleListScreenState extends State<BundleListScreen> {
       backgroundColor: kBackgroundColor,
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(color: kPrimaryColor.withOpacity(0.7)),
+              child: CircularProgressIndicator(
+                  color: kPrimaryColor.withOpacity(0.7)),
             )
           : SingleChildScrollView(
               child: Column(

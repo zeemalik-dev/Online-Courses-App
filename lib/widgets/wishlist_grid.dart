@@ -1,4 +1,4 @@
-import 'package:academy_app/widgets/util.dart';
+import 'package:wilan/widgets/util.dart';
 import 'package:flutter/material.dart';
 import '../constants.dart';
 import '../models/course.dart';

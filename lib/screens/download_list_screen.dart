@@ -1,12 +1,12 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:io';
-import 'package:academy_app/constants.dart';
-import 'package:academy_app/models/common_functions.dart';
-import 'package:academy_app/models/section_db_model.dart';
-import 'package:academy_app/models/video_db_model.dart';
-import 'package:academy_app/providers/database_helper.dart';
-import 'package:academy_app/widgets/custom_text.dart';
+import 'package:wilan/constants.dart';
+import 'package:wilan/models/common_functions.dart';
+import 'package:wilan/models/section_db_model.dart';
+import 'package:wilan/models/video_db_model.dart';
+import 'package:wilan/providers/database_helper.dart';
+import 'package:wilan/widgets/custom_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape.dart';
@@ -243,15 +243,15 @@ class _DownloadListScreenState extends State<DownloadListScreen> {
                                                               AlertDialog(
                                                             title: const Text(
                                                                 'Notifying'),
-                                                            content: const Column(
+                                                            content:
+                                                                const Column(
                                                               mainAxisSize:
                                                                   MainAxisSize
                                                                       .min,
                                                               crossAxisAlignment:
                                                                   CrossAxisAlignment
                                                                       .start,
-                                                              children: <
-                                                                  Widget>[
+                                                              children: <Widget>[
                                                                 Text(
                                                                     'Do you wish to remove this lesson?'),
                                                               ],

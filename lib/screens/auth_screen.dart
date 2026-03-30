@@ -2,12 +2,12 @@
 
 import 'dart:developer';
 
-import 'package:academy_app/constants.dart';
-import 'package:academy_app/models/common_functions.dart';
-import 'package:academy_app/providers/auth.dart';
-import 'package:academy_app/screens/forgot_password_screen.dart';
-import 'package:academy_app/screens/signup_screen.dart';
-import 'package:academy_app/widgets/string_extension.dart';
+import 'package:wilan/constants.dart';
+import 'package:wilan/models/common_functions.dart';
+import 'package:wilan/providers/auth.dart';
+import 'package:wilan/screens/forgot_password_screen.dart';
+import 'package:wilan/screens/signup_screen.dart';
+import 'package:wilan/widgets/string_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -97,24 +97,25 @@ class _AuthScreenState extends State<AuthScreen> {
       _isLoading = true;
     });
 
-    await Provider.of<Auth>(context, listen: false).login(
+    await Provider.of<Auth>(context, listen: false)
+        .login(
       _authData['email'].toString(),
       _authData['password'].toString(),
-    ).then((_) {
-      
+    )
+        .then((_) {
 // debugger();
       setState(() {
         _isLoading = false;
         userDetails = Provider.of<Auth>(context, listen: false).user;
       });
     });
-    if(userDetails?.emailVerifiedAt == 1){
-      if(userDetails?.emailVerifiedAt == 'needed-verification') {
-        Navigator.of(context).pushNamed(DeviceVerificationScreen.routeName,
-          arguments: {
-            'email': userDetails?.email,
-            'token': userDetails?.token, // Replace with the actual token value
-          });
+    if (userDetails?.emailVerifiedAt == 1) {
+      if (userDetails?.emailVerifiedAt == 'needed-verification') {
+        Navigator.of(context)
+            .pushNamed(DeviceVerificationScreen.routeName, arguments: {
+          'email': userDetails?.email,
+          'token': userDetails?.token, // Replace with the actual token value
+        });
         CommonFunctions.showSuccessToast(
           userDetails?.emailVerifiedAt?.capitalize(),
         );
@@ -123,7 +124,8 @@ class _AuthScreenState extends State<AuthScreen> {
         CommonFunctions.showSuccessToast('Welcome, ${userDetails?.name}');
       }
     } else {
-      CommonFunctions.showErrorDialog(userDetails?.email?.capitalize()??'', context);
+      Navigator.pushNamedAndRemoveUntil(context, '/home', (r) => false);
+      // CommonFunctions.showErrorDialog(userDetails?.emailVerifiedAt?.capitalize() ?? '', context);
     }
 
     setState(() {

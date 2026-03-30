@@ -1,4 +1,4 @@
-import 'package:academy_app/constants.dart';
+import 'package:wilan/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -23,13 +23,13 @@ class CommonFunctions {
 
   static void showSuccessToast(String message) {
     Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.SNACKBAR,
-        // backgroundColor: Colors.blueGrey,
-        // textColor: kToastTextColor,
-        // fontSize: 16.0
-        );
+      msg: message,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.SNACKBAR,
+      // backgroundColor: Colors.blueGrey,
+      // textColor: kToastTextColor,
+      // fontSize: 16.0
+    );
   }
 
   static void showWarningToast(String message) {

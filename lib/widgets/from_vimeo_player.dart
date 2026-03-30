@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:academy_app/constants.dart';
-import 'package:academy_app/providers/my_courses.dart';
-import 'package:academy_app/providers/shared_pref_helper.dart';
+import 'package:wilan/constants.dart';
+import 'package:wilan/providers/my_courses.dart';
+import 'package:wilan/providers/shared_pref_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';

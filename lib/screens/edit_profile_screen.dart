@@ -1,11 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
-import 'package:academy_app/constants.dart';
-import 'package:academy_app/models/common_functions.dart';
-import 'package:academy_app/providers/auth.dart';
-import 'package:academy_app/widgets/app_bar_two.dart';
-import 'package:academy_app/widgets/user_image_picker.dart';
+import 'package:wilan/constants.dart';
+import 'package:wilan/models/common_functions.dart';
+import 'package:wilan/providers/auth.dart';
+import 'package:wilan/widgets/app_bar_two.dart';
+import 'package:wilan/widgets/user_image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +49,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     try {
       final auth = Provider.of<Auth>(context, listen: false);
       final currentUser = auth.user;
-      
+
       if (currentUser != null) {
         // Prepare update data
         final updateData = <String, dynamic>{
@@ -60,7 +60,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           'facebook': _userData['facebook'] ?? currentUser.facebook,
           'linkedin': _userData['linkedin'] ?? currentUser.linkedin,
         };
-        
+
         await auth.updateUserData(updateData);
         CommonFunctions.showSuccessToast('User updated Successfully');
       }
@@ -105,7 +105,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         builder: (ctx, dataSnapshot) {
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(color: kPrimaryColor.withOpacity(0.7)),
+              child: CircularProgressIndicator(
+                  color: kPrimaryColor.withOpacity(0.7)),
             );
           } else {
             if (dataSnapshot.error != null) {
@@ -116,18 +117,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               return Consumer<Auth>(
                 builder: (context, authData, child) {
                   final user = authData.user;
-                  
+
                   if (user == null) {
                     return const Center(
                       child: Text('No user data available'),
                     );
                   }
-                  
+
                   // Split name into first and last name for display
                   final nameParts = user.name?.split(' ') ?? ['', ''];
                   final firstName = nameParts.isNotEmpty ? nameParts[0] : '';
-                  final lastName = nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
-                  
+                  final lastName = nameParts.length > 1
+                      ? nameParts.sublist(1).join(' ')
+                      : '';
+
                   return SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,10 +192,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         return null;
                                       },
                                       onSaved: (value) {
-                                        final currentLastName = _userData['last_name'] ?? lastName;
-                                        final fullName = '$value $currentLastName'.trim();
+                                        final currentLastName =
+                                            _userData['last_name'] ?? lastName;
+                                        final fullName =
+                                            '$value $currentLastName'.trim();
                                         _userData['name'] = fullName;
-                                        _firstNameController.text = value as String;
+                                        _firstNameController.text =
+                                            value as String;
                                       },
                                     ),
                                   ),
@@ -226,10 +232,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         return null;
                                       },
                                       onSaved: (value) {
-                                        final currentFirstName = _userData['first_name'] ?? firstName;
-                                        final fullName = '$currentFirstName $value'.trim();
+                                        final currentFirstName =
+                                            _userData['first_name'] ??
+                                                firstName;
+                                        final fullName =
+                                            '$currentFirstName $value'.trim();
                                         _userData['name'] = fullName;
-                                        _lastNameController.text = value as String;
+                                        _lastNameController.text =
+                                            value as String;
                                       },
                                     ),
                                   ),
@@ -256,7 +266,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         Icons.email,
                                       ),
                                       keyboardType: TextInputType.emailAddress,
-                                      enabled: false, // Email usually can't be changed
+                                      enabled:
+                                          false, // Email usually can't be changed
                                       onSaved: (value) {
                                         _userData['email'] = value.toString();
                                       },
@@ -369,7 +380,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   SizedBox(
                                     width: double.infinity,
                                     child: _isLoading
-                                        ? const Center(child: CircularProgressIndicator())
+                                        ? const Center(
+                                            child: CircularProgressIndicator())
                                         : MaterialButton(
                                             onPressed: () {
                                               _submit();
@@ -408,7 +420,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
     );
   }
-  
+
   @override
   void dispose() {
     _firstNameController.dispose();

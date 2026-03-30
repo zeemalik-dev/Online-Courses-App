@@ -1,9 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:academy_app/providers/bundles.dart';
-import 'package:academy_app/providers/shared_pref_helper.dart';
-import 'package:academy_app/widgets/app_bar_two.dart';
-import 'package:academy_app/widgets/my_bundle_course_list_item.dart';
+import 'package:wilan/providers/bundles.dart';
+import 'package:wilan/providers/shared_pref_helper.dart';
+import 'package:wilan/widgets/app_bar_two.dart';
+import 'package:wilan/widgets/my_bundle_course_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -72,7 +72,8 @@ class _MyBundleCoursesListScreenState extends State<MyBundleCoursesListScreen> {
       backgroundColor: kBackgroundColor,
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(color: kPrimaryColor.withOpacity(0.7)),
+              child: CircularProgressIndicator(
+                  color: kPrimaryColor.withOpacity(0.7)),
             )
           : SingleChildScrollView(
               child: Column(

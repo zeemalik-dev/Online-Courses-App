@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:academy_app/models/user.dart';
+import 'package:wilan/models/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,12 +38,12 @@ class Auth with ChangeNotifier {
       if (response.statusCode == 200 || response.statusCode == 201) {
         // Parse the login response using LoginResponse model
         final loginResponse = LoginResponse.fromJson(responseData);
-        
+
         if (loginResponse.user != null && loginResponse.token != null) {
           _user = loginResponse.user;
           _token = loginResponse.token;
           _userId = loginResponse.user?.id?.toString();
-          
+
           // Save to shared preferences
           await SharedPreferenceHelper().setAuthToken(_token!);
           final prefs = await SharedPreferences.getInstance();
@@ -70,12 +70,12 @@ class Auth with ChangeNotifier {
   Future<void> getUserInfo() async {
     final authToken = await SharedPreferenceHelper().getAuthToken();
     var url = '$BASE_URL/api/userdata?auth_token=$authToken';
-    
+
     try {
       if (authToken == null) {
         throw const HttpException('No Auth User');
       }
-      
+
       final response = await http.get(Uri.parse(url));
       final responseData = json.decode(response.body);
 
@@ -114,7 +114,7 @@ class Auth with ChangeNotifier {
           token: _user!.token,
         );
       }
-      
+
       notifyListeners();
     } catch (error) {
       rethrow;
@@ -249,12 +249,12 @@ class Auth with ChangeNotifier {
   Future<void> loadUserFromPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     final userDataString = prefs.getString('userData');
-    
+
     if (userDataString != null) {
       final userData = json.decode(userDataString);
       _token = userData['token'];
       _userId = userData['user_id'];
-      
+
       if (userData['user'] != null) {
         _user = User.fromJson(userData['user']);
         notifyListeners();
